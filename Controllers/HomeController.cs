@@ -9,6 +9,7 @@ using Team5_ConestogaVirtualGameStore.Models;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
+    // Lirjeta here
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
