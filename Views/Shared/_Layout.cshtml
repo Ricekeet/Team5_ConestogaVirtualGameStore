@@ -25,7 +25,8 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" asp-action="Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Game">Game</a></li>
                         <a class="nav-link" asp-controller="Home" asp-action="Profile">Profile</a>
                         <a class="nav-link" asp-controller="Game" asp-action="GameDetail">Detail</a>
                         <a class="nav-link" asp-controller="Game" asp-action="Index">Store</a>
@@ -40,11 +41,11 @@
         </li>*@
                     </ul>
                     <form class="d-flex">
-                        <a asp-controller="Cart" asp-action="Cart" class="btn btn-outline-light" type="submit">
+                        <button class="btn btn-outline-light" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
                             <span class="badge bg-light text-dark ms-1 rounded-pill">0</span>
-                        </a>
+                        </button>
                     </form>
                 </div>
                 <partial name="_LoginPartial" />
