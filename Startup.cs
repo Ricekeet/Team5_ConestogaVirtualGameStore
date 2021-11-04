@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,7 +27,10 @@ namespace Team5_ConestogaVirtualGameStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(); 
+            services.AddDbContext<Models.Team5_ConestogaVirtualGameStoreContext>(opt =>
+                 opt.UseSqlServer(Configuration.GetConnectionString("Team5_ConestogaVirtualGameStoreContextConnection")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
