@@ -45,6 +45,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(game);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Game/Create
         public IActionResult Create()
         {
@@ -52,6 +53,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Game/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -69,6 +71,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(game);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Game/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -86,6 +89,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(game);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Game/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -122,6 +126,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(game);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Game/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -141,6 +146,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(game);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Game/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

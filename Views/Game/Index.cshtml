@@ -37,10 +37,13 @@
         <b>Platform</b> <br />
     </p>
 
-    <div style="text-align: right;">
-        <a class="btn btn-outline-dark text-light bg-primary mt-auto" asp-action="Create">Add Game</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <div style="text-align: right;">
+            <a class="btn btn-outline-dark text-light bg-primary mt-auto" asp-action="Create">Add Game</a>
+        </div>
+    }
     </div>
-</div>
 <!-- Section-->
 <section class="py-5">
 
@@ -57,9 +60,9 @@
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <!-- Product name-->
-                                <h5 class="fw-bolder">@Html.DisplayNameFor(model => model.Name)</h5>
+                                <h5 class="fw-bolder">@Html.DisplayFor(modelItem => item.Name)</h5>
                                 <!-- Product price-->
-                                @Html.DisplayNameFor(model => model.Price)
+                                @Html.DisplayFor(modelItem => item.Price)
                             </div>
                         </div>
                         <!-- Product actions-->
@@ -68,13 +71,15 @@
                                 <a asp-action="Details" class="btn btn-outline-dark mt-auto" asp-route-id="@item.GameId">Details</a>
                             </div>
                         </div>
-                        <!-- Admin actions-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <a class="btn btn-outline-dark bg-info mt-auto" asp-action="Edit" asp-route-id="@item.GameId">Edit</a>
-                                <a class="btn btn-outline-dark bg-info mt-auto" asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <a class="btn btn-outline-dark bg-info mt-auto" asp-action="Edit" asp-route-id="@item.GameId">Edit</a>
+                                    <a class="btn btn-outline-dark bg-info mt-auto" asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
             }
@@ -86,79 +91,79 @@
 
 @*@model IEnumerable<Team5_ConestogaVirtualGameStore.Models.Game>
 
-    @{
-    ViewData["Title"] = "Index";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-}
+        @{
+        ViewData["Title"] = "Index";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 
-<h1>Index</h1>
+    <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Inventory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiscountPercent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReviewListId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Platform)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReleaseDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Inventory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiscountPercent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReviewListId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Platform.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.GameId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.GameId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-    </table>*@
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReleaseDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inventory)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DiscountPercent)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReviewListId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Platform)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReleaseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inventory)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountPercent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReviewListId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Platform.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.GameId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.GameId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+        </table>*@

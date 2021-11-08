@@ -19,8 +19,14 @@ namespace Team5_ConestogaVirtualGameStore.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("Team5_ConestogaVirtualGameStoreContextConnection")));
 
-                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<Team5_ConestogaVirtualGameStoreContext>();
+                //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                //    .AddEntityFrameworkStores<Team5_ConestogaVirtualGameStoreContext>();
+
+                services.AddIdentity<IdentityUser, IdentityRole>()
+                        .AddRoleManager<RoleManager<IdentityRole>>()
+                        .AddDefaultUI()
+                        .AddDefaultTokenProviders()
+                        .AddEntityFrameworkStores<Team5_ConestogaVirtualGameStoreContext>();
             });
         }
     }
