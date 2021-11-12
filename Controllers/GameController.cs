@@ -6,15 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Team5_ConestogaVirtualGameStore.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
     public class GameController : Controller
     {
-        private readonly Team5_ConestogaVirtualGameStoreContext _context;
+        private readonly CVGS_Context _context;
 
-        public GameController(Team5_ConestogaVirtualGameStoreContext context)
+        public GameController(CVGS_Context context)
         {
             _context = context;
         }
@@ -22,8 +21,8 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // GET: Game
         public async Task<IActionResult> Index()
         {
-            var team5_ConestogaVirtualGameStoreContext = _context.Game.Include(g => g.Platform);
-            return View(await team5_ConestogaVirtualGameStoreContext.ToListAsync());
+            var cVGS_Context = _context.Game.Include(g => g.Genre).Include(g => g.Platform).Include(g => g.ReviewList);
+            return View(await cVGS_Context.ToListAsync());
         }
 
         // GET: Game/Details/5
@@ -35,7 +34,9 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             }
 
             var game = await _context.Game
+                .Include(g => g.Genre)
                 .Include(g => g.Platform)
+                .Include(g => g.ReviewList)
                 .FirstOrDefaultAsync(m => m.GameId == id);
             if (game == null)
             {
@@ -45,21 +46,21 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(game);
         }
 
-        [Authorize(Roles = "Admin")]
         // GET: Game/Create
         public IActionResult Create()
         {
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name");
             ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name");
+            ViewData["ReviewListId"] = new SelectList(_context.ReviewList, "ListId", "ListId");
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
         // POST: Game/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GameId,PlatformId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description,ReviewListId")] Game game)
+        public async Task<IActionResult> Create([Bind("GameId,GenreId,PlatformId,ReviewListId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description")] Game game)
         {
             if (ModelState.IsValid)
             {
@@ -67,11 +68,12 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", game.GenreId);
             ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", game.PlatformId);
+            ViewData["ReviewListId"] = new SelectList(_context.ReviewList, "ListId", "ListId", game.ReviewListId);
             return View(game);
         }
 
-        [Authorize(Roles = "Admin")]
         // GET: Game/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -85,17 +87,18 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             {
                 return NotFound();
             }
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", game.GenreId);
             ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", game.PlatformId);
+            ViewData["ReviewListId"] = new SelectList(_context.ReviewList, "ListId", "ListId", game.ReviewListId);
             return View(game);
         }
 
-        [Authorize(Roles = "Admin")]
         // POST: Game/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GameId,PlatformId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description,ReviewListId")] Game game)
+        public async Task<IActionResult> Edit(int id, [Bind("GameId,GenreId,PlatformId,ReviewListId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description")] Game game)
         {
             if (id != game.GameId)
             {
@@ -122,11 +125,12 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", game.GenreId);
             ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", game.PlatformId);
+            ViewData["ReviewListId"] = new SelectList(_context.ReviewList, "ListId", "ListId", game.ReviewListId);
             return View(game);
         }
 
-        [Authorize(Roles = "Admin")]
         // GET: Game/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -136,7 +140,9 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             }
 
             var game = await _context.Game
+                .Include(g => g.Genre)
                 .Include(g => g.Platform)
+                .Include(g => g.ReviewList)
                 .FirstOrDefaultAsync(m => m.GameId == id);
             if (game == null)
             {
@@ -146,7 +152,6 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(game);
         }
 
-        [Authorize(Roles = "Admin")]
         // POST: Game/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

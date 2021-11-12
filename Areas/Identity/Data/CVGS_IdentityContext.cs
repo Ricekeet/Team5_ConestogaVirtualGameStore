@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Team5_ConestogaVirtualGameStore.Areas.Identity.Data;
 
 namespace Team5_ConestogaVirtualGameStore.Data
 {
-    public class Team5_ConestogaVirtualGameStoreContext : IdentityDbContext<IdentityUser>
+    public class CVGS_IdentityContext : IdentityDbContext<CVGS_User>
     {
-        public Team5_ConestogaVirtualGameStoreContext(DbContextOptions<Team5_ConestogaVirtualGameStoreContext> options)
+        public CVGS_IdentityContext(DbContextOptions<CVGS_IdentityContext> options)
             : base(options)
         {
         }

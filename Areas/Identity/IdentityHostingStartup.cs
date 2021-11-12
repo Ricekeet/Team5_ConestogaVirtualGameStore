@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Team5_ConestogaVirtualGameStore.Areas.Identity.Data;
 using Team5_ConestogaVirtualGameStore.Data;
 
 [assembly: HostingStartup(typeof(Team5_ConestogaVirtualGameStore.Areas.Identity.IdentityHostingStartup))]
@@ -15,18 +16,19 @@ namespace Team5_ConestogaVirtualGameStore.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-                services.AddDbContext<Team5_ConestogaVirtualGameStoreContext>(options =>
+                services.AddDbContext<CVGS_IdentityContext>(options =>
                     options.UseSqlServer(
-                        context.Configuration.GetConnectionString("Team5_ConestogaVirtualGameStoreContextConnection")));
+                        context.Configuration.GetConnectionString("CVGS_IdentityContextConnection")));
 
-                //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                //    .AddEntityFrameworkStores<Team5_ConestogaVirtualGameStoreContext>();
+                //services.AddDefaultIdentity<CVGS_User>(options => options.SignIn.RequireConfirmedAccount = true)
+                    //.AddEntityFrameworkStores<CVGS_IdentityContext>();
 
+                //Add Role Manager Support
                 services.AddIdentity<IdentityUser, IdentityRole>()
-                        .AddRoleManager<RoleManager<IdentityRole>>()
-                        .AddDefaultUI()
-                        .AddDefaultTokenProviders()
-                        .AddEntityFrameworkStores<Team5_ConestogaVirtualGameStoreContext>();
+                    .AddRoleManager<RoleManager<IdentityRole>>()
+                    .AddDefaultUI()
+                    .AddDefaultTokenProviders()
+                    .AddEntityFrameworkStores<CVGS_IdentityContext>();
             });
         }
     }

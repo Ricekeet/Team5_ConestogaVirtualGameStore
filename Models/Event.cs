@@ -7,17 +7,19 @@ using System.Collections.Generic;
 
 namespace Team5_ConestogaVirtualGameStore.Models
 {
-    public partial class Genre
+    public partial class Event
     {
-        public Genre()
+        public Event()
         {
-            Game = new HashSet<Game>();
+            JoinedEvent = new HashSet<JoinedEvent>();
         }
 
-        public int GenreId { get; set; }
-        public string Name { get; set; }
+        public int EventId { get; set; }
+        public DateTime Date { get; set; }
         public string Description { get; set; }
+        public int GameListId { get; set; }
 
-        public virtual ICollection<Game> Game { get; set; }
+        public virtual EventGamesList GameList { get; set; }
+        public virtual ICollection<JoinedEvent> JoinedEvent { get; set; }
     }
 }

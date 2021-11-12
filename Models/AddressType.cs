@@ -9,7 +9,14 @@ namespace Team5_ConestogaVirtualGameStore.Models
 {
     public partial class AddressType
     {
-        public int AddressTypeId { get; set; }
+        public AddressType()
+        {
+            Address = new HashSet<Address>();
+        }
+
+        public int TypeId { get; set; }
         public string Name { get; set; }
+
+        public virtual ICollection<Address> Address { get; set; }
     }
 }

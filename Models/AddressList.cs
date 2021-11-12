@@ -7,15 +7,9 @@ using System.Collections.Generic;
 
 namespace Team5_ConestogaVirtualGameStore.Models
 {
-    public partial class Review
+    public partial class AddressList
     {
-        public int ReviewId { get; set; }
-        public int ReviewListId { get; set; }
+        public int ListId { get; set; }
         public string UserId { get; set; }
-        public string Description { get; set; }
-        public int Rating { get; set; }
-        public int? Pending { get; set; }
-
-        public virtual ReviewList ReviewList { get; set; }
     }
 }

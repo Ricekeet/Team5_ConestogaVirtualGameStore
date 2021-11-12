@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Team5_ConestogaVirtualGameStore.Data;
+//using Team5_ConestogaVirtualGameStore.Data;
 
 namespace Team5_ConestogaVirtualGameStore
 {
@@ -28,7 +28,7 @@ namespace Team5_ConestogaVirtualGameStore
         {
             services.AddRazorPages();
             services.AddControllersWithViews(); 
-            services.AddDbContext<Models.Team5_ConestogaVirtualGameStoreContext>(opt =>
+            services.AddDbContext<Models.CVGS_Context>(opt =>
                  opt.UseSqlServer(Configuration.GetConnectionString("Team5_ConestogaVirtualGameStoreContextConnection")));
 
         }
@@ -56,10 +56,10 @@ namespace Team5_ConestogaVirtualGameStore
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

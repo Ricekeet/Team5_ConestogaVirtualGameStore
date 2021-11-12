@@ -7,15 +7,16 @@ using System.Collections.Generic;
 
 namespace Team5_ConestogaVirtualGameStore.Models
 {
-    public partial class Review
+    public partial class Wishlist
     {
-        public int ReviewId { get; set; }
-        public int ReviewListId { get; set; }
-        public string UserId { get; set; }
-        public string Description { get; set; }
-        public int Rating { get; set; }
-        public int? Pending { get; set; }
+        public Wishlist()
+        {
+            WishlistItem = new HashSet<WishlistItem>();
+        }
 
-        public virtual ReviewList ReviewList { get; set; }
+        public int Id { get; set; }
+        public string UserId { get; set; }
+
+        public virtual ICollection<WishlistItem> WishlistItem { get; set; }
     }
 }

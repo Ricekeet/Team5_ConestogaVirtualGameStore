@@ -7,17 +7,13 @@ using System.Collections.Generic;
 
 namespace Team5_ConestogaVirtualGameStore.Models
 {
-    public partial class Genre
+    public partial class FriendItem
     {
-        public Genre()
-        {
-            Game = new HashSet<Game>();
-        }
+        public int ItemId { get; set; }
+        public int ListId { get; set; }
+        public string FriendUserId { get; set; }
+        public int FriendType { get; set; }
 
-        public int GenreId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-
-        public virtual ICollection<Game> Game { get; set; }
+        public virtual FriendList List { get; set; }
     }
 }

@@ -9,13 +9,15 @@ namespace Team5_ConestogaVirtualGameStore.Models
 {
     public partial class Address
     {
-        public int AddressId { get; set; }
-        public string AddressLine1 { get; set; }
-        public string AddressLine2 { get; set; }
+        public int Id { get; set; }
+        public int AddressType { get; set; }
+        public string Line1 { get; set; }
+        public string Line2 { get; set; }
         public string City { get; set; }
-        public string Provice { get; set; }
+        public string Province { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
-        public int AddressTypeId { get; set; }
+
+        public virtual AddressType AddressTypeNavigation { get; set; }
     }
 }

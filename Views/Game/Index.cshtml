@@ -1,169 +1,84 @@
 ﻿@model IEnumerable<Team5_ConestogaVirtualGameStore.Models.Game>
 
 @{
-    ViewData["Title"] = "Store";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    <!-- Search -->
-    <form style="margin: 20px 0;">
-        <div class="search">
-            <input type="text" class="searchTerm" placeholder="Search">
-            <button type="submit" class="searchButton">
-                <i class="fa fa-search"></i>
-            </button>
-        </div>
-    </form>
+<h1>Index</h1>
 
-    <!-- Filter -->
-    <p class="genre">
-        <b>Genre</b> <br />
-        <label>Action<input type="checkbox" /></label>
-        <label>Fighting<input type="checkbox" /></label>
-        <label>Music & Party<input type="checkbox" /></label>
-        <label>Puzzle<input type="checkbox" /></label>
-        <label>RPG<input type="checkbox" /></label>
-        <label>Shooter<input type="checkbox" /></label>
-        <label>Simulation<input type="checkbox" /></label>
-        <label>Sports<input type="checkbox" /></label>
-        <label>Strategy<input type="checkbox" /></label>
-    </p>
-    <p class="ratingSort">
-        <b>Rating Sorting</b> <br />
-        <a class="btn btn-outline-dark text-light bg-primary mt-auto" href="#">high</a>
-        <a class="btn btn-outline-dark text-light bg-primary mt-auto" href="#">low</a>
-    </p>
-    <p class="platform">
-        <b>Platform</b> <br />
-    </p>
-
-    @if (User.IsInRole("Admin"))
-    {
-        <div style="text-align: right;">
-            <a class="btn btn-outline-dark text-light bg-primary mt-auto" asp-action="Create">Add Game</a>
-        </div>
-    }
-    </div>
-<!-- Section-->
-<section class="py-5">
-
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
-            @foreach (var item in Model)
-            {
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- Product image-->
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <!-- Product details-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Product name-->
-                                <h5 class="fw-bolder">@Html.DisplayFor(modelItem => item.Name)</h5>
-                                <!-- Product price-->
-                                @Html.DisplayFor(modelItem => item.Price)
-                            </div>
-                        </div>
-                        <!-- Product actions-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <a asp-action="Details" class="btn btn-outline-dark mt-auto" asp-route-id="@item.GameId">Details</a>
-                            </div>
-                        </div>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center">
-                                    <a class="btn btn-outline-dark bg-info mt-auto" asp-action="Edit" asp-route-id="@item.GameId">Edit</a>
-                                    <a class="btn btn-outline-dark bg-info mt-auto" asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</section>
-
-
-
-@*@model IEnumerable<Team5_ConestogaVirtualGameStore.Models.Game>
-
-        @{
-        ViewData["Title"] = "Index";
-            Layout = "~/Views/Shared/_Layout.cshtml";
-    }
-
-    <h1>Index</h1>
-
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReleaseDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Inventory)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DiscountPercent)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReviewListId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Platform)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-    @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReleaseDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Inventory)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DiscountPercent)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReviewListId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Platform.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.GameId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.GameId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
-                </td>
-            </tr>
-    }
-        </tbody>
-        </table>*@
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountPercent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Platform)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReviewList)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Inventory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiscountPercent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Platform.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReviewList.ListId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.GameId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.GameId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
