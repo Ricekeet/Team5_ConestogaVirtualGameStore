@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Team5_ConestogaVirtualGameStore.Areas.Identity.Data;
 using Team5_ConestogaVirtualGameStore.ViewModels;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
@@ -13,8 +14,8 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
-        private readonly UserManager<IdentityUser> userManager;
-        public AdministrationController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly UserManager<CVGS_User> userManager;
+        public AdministrationController(UserManager<CVGS_User> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
