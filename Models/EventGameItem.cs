@@ -10,8 +10,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
     public partial class EventGameItem
     {
         public int ItemId { get; set; }
-        public int ListId { get; set; }
-
-        public virtual EventGamesList List { get; set; }
+        public int EventId { get; set; }
+        public int GameId { get; set; }
     }
 }

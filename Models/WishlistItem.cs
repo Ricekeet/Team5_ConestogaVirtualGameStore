@@ -10,10 +10,9 @@ namespace Team5_ConestogaVirtualGameStore.Models
     public partial class WishlistItem
     {
         public int Id { get; set; }
-        public int WishlistId { get; set; }
         public int GameId { get; set; }
+        public string UserId { get; set; }
 
         public virtual Game Game { get; set; }
-        public virtual Wishlist Wishlist { get; set; }
     }
 }

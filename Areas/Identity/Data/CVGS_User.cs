@@ -9,13 +9,12 @@ namespace Team5_ConestogaVirtualGameStore.Areas.Identity.Data
     // Add profile data for application users by adding properties to the CVGS_User class
     public class CVGS_User : IdentityUser
     {
+        public string picFileName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int AddressListID { get; set; }
         public int FavoriteGenreID { get; set; }
         public int FavoritePlatformID { get; set; }
-        public int PromotialEmails { get; set; }
-        public int CartID { get; set; }
-        public int WishlistID { get; set; }
+        public bool PromotialEmails { get; set; }
     }
 }

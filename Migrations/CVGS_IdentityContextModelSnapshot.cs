@@ -97,12 +97,10 @@ namespace Team5_ConestogaVirtualGameStore.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -139,12 +137,10 @@ namespace Team5_ConestogaVirtualGameStore.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -163,9 +159,6 @@ namespace Team5_ConestogaVirtualGameStore.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("AddressListID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CartID")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -214,8 +207,8 @@ namespace Team5_ConestogaVirtualGameStore.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PromotialEmails")
-                        .HasColumnType("int");
+                    b.Property<bool>("PromotialEmails")
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -227,8 +220,8 @@ namespace Team5_ConestogaVirtualGameStore.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<int>("WishlistID")
-                        .HasColumnType("int");
+                    b.Property<string>("picFileName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

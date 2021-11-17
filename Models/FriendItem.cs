@@ -10,10 +10,8 @@ namespace Team5_ConestogaVirtualGameStore.Models
     public partial class FriendItem
     {
         public int ItemId { get; set; }
-        public int ListId { get; set; }
-        public string FriendUserId { get; set; }
         public int FriendType { get; set; }
-
-        public virtual FriendList List { get; set; }
+        public string HostUserId { get; set; }
+        public string FriendUserId { get; set; }
     }
 }

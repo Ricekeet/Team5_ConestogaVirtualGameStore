@@ -10,6 +10,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
     public partial class Address
     {
         public int Id { get; set; }
+        public string UserId { get; set; }
         public int AddressType { get; set; }
         public string Line1 { get; set; }
         public string Line2 { get; set; }

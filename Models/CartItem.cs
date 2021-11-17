@@ -10,10 +10,8 @@ namespace Team5_ConestogaVirtualGameStore.Models
     public partial class CartItem
     {
         public int ItemId { get; set; }
-        public int CartId { get; set; }
+        public string UserId { get; set; }
+        public int GameId { get; set; }
         public int Quantity { get; set; }
-        public double Subtotal { get; set; }
-
-        public virtual Cart Cart { get; set; }
     }
 }

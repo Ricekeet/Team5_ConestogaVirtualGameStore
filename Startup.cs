@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-//using Team5_ConestogaVirtualGameStore.Data;
+using Team5_ConestogaVirtualGameStore.Data;
 
 namespace Team5_ConestogaVirtualGameStore
 {
@@ -27,7 +27,7 @@ namespace Team5_ConestogaVirtualGameStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddControllersWithViews(); 
+            services.AddControllersWithViews();
             services.AddDbContext<Models.CVGS_Context>(opt =>
                  opt.UseSqlServer(Configuration.GetConnectionString("Team5_ConestogaVirtualGameStoreContextConnection")));
 

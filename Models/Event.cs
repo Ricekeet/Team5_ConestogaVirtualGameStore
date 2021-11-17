@@ -15,11 +15,11 @@ namespace Team5_ConestogaVirtualGameStore.Models
         }
 
         public int EventId { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public string Description { get; set; }
-        public int GameListId { get; set; }
+        public string EventPic { get; set; }
 
-        public virtual EventGamesList GameList { get; set; }
         public virtual ICollection<JoinedEvent> JoinedEvent { get; set; }
     }
 }

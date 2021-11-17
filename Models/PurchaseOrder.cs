@@ -17,8 +17,6 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public int OrderId { get; set; }
         public string UserId { get; set; }
         public DateTime DateOrdered { get; set; }
-        public double SubTotal { get; set; }
-        public double Tax { get; set; }
         public double Total { get; set; }
 
         public virtual ICollection<OrderItem> OrderItem { get; set; }

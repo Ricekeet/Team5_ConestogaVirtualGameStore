@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Team5_ConestogaVirtualGameStore.Models;
+//using Team5_ConestogaVirtualGameStore.Models;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
@@ -45,10 +45,10 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         }
         
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //public IActionResult Error()
+        //{
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
     }
 }
