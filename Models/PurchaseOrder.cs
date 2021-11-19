@@ -19,6 +19,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public DateTime DateOrdered { get; set; }
         public double Total { get; set; }
 
+        public virtual AspNetUsers User { get; set; }
         public virtual ICollection<OrderItem> OrderItem { get; set; }
     }
 }

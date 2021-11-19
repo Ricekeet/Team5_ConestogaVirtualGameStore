@@ -11,6 +11,8 @@ namespace Team5_ConestogaVirtualGameStore.Models
     {
         public Game()
         {
+            CartItem = new HashSet<CartItem>();
+            EventGameItem = new HashSet<EventGameItem>();
             OrderItem = new HashSet<OrderItem>();
             Review = new HashSet<Review>();
             WishlistItem = new HashSet<WishlistItem>();
@@ -29,6 +31,8 @@ namespace Team5_ConestogaVirtualGameStore.Models
 
         public virtual Genre Genre { get; set; }
         public virtual Platform Platform { get; set; }
+        public virtual ICollection<CartItem> CartItem { get; set; }
+        public virtual ICollection<EventGameItem> EventGameItem { get; set; }
         public virtual ICollection<OrderItem> OrderItem { get; set; }
         public virtual ICollection<Review> Review { get; set; }
         public virtual ICollection<WishlistItem> WishlistItem { get; set; }

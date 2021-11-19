@@ -11,7 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-//using Team5_ConestogaVirtualGameStore.Models;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
@@ -34,8 +33,10 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         {
             return View();
         }
+
         public IActionResult Profile()
         {
+
             return View();
         }
 
