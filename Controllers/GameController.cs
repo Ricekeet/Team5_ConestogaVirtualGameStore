@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -29,6 +30,49 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         {
 
         }
+        // GET: Game/AddToCart/5
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            CartItem cartItem = new CartItem();
+            cartItem.UserId = userId.ToString();
+            cartItem.Quantity = 1;
+            cartItem.GameId = id;
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(cartItem);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index", "Game");
+        }
+
+        // GET: Game/AddToWishlist/5
+        public async Task<IActionResult> AddToWishlist(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            WishlistItem wishItem = new WishlistItem();
+            wishItem.UserId = userId.ToString();
+            wishItem.GameId = id;
+
+            _context.Add(wishItem);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Game");
+        }
+
 
         // GET: Game/Details/5
         public async Task<IActionResult> Details(int? id)

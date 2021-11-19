@@ -5,8 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\WishList\**" />
+    <Content Remove="Views\WishList\**" />
+    <EmbeddedResource Remove="Views\WishList\**" />
+    <None Remove="Views\WishList\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Views\WishList\" />
   </ItemGroup>
 
   <ItemGroup>
