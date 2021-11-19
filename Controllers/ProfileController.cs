@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-//using Team5_ConestogaVirtualGameStore.Models;
+using Team5_ConestogaVirtualGameStore.Models;
 using Team5_ConestogaVirtualGameStore.Data;
 using Team5_ConestogaVirtualGameStore.Areas.Identity.Data;
 
