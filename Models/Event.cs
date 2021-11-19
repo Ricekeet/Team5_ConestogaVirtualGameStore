@@ -11,6 +11,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
     {
         public Event()
         {
+            EventGameItem = new HashSet<EventGameItem>();
             JoinedEvent = new HashSet<JoinedEvent>();
         }
 
@@ -20,6 +21,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public string Description { get; set; }
         public string EventPic { get; set; }
 
+        public virtual ICollection<EventGameItem> EventGameItem { get; set; }
         public virtual ICollection<JoinedEvent> JoinedEvent { get; set; }
     }
 }

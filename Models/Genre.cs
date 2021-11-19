@@ -11,6 +11,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
     {
         public Genre()
         {
+            AspNetUsers = new HashSet<AspNetUsers>();
             Game = new HashSet<Game>();
         }
 
@@ -18,6 +19,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
         public virtual ICollection<Game> Game { get; set; }
     }
 }

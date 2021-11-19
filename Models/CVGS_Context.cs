@@ -21,6 +21,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
 
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<AddressType> AddressType { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<CartItem> CartItem { get; set; }
         public virtual DbSet<Event> Event { get; set; }
         public virtual DbSet<EventGameItem> EventGameItem { get; set; }
@@ -90,13 +91,19 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasColumnName("userID")
-                    .HasMaxLength(256);
+                    .HasMaxLength(450);
 
                 entity.HasOne(d => d.AddressTypeNavigation)
                     .WithMany(p => p.Address)
                     .HasForeignKey(d => d.AddressType)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Address__address__38996AB5");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Address)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Address_AspNetUsers");
             });
 
             modelBuilder.Entity<AddressType>(entity =>
@@ -113,6 +120,45 @@ namespace Team5_ConestogaVirtualGameStore.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<AspNetUsers>(entity =>
+            {
+                entity.HasIndex(e => e.NormalizedEmail)
+                    .HasName("EmailIndex");
+
+                entity.HasIndex(e => e.NormalizedUserName)
+                    .HasName("UserNameIndex")
+                    .IsUnique()
+                    .HasFilter("([NormalizedUserName] IS NOT NULL)");
+
+                entity.Property(e => e.AddressListId).HasColumnName("AddressListID");
+
+                entity.Property(e => e.Email).HasMaxLength(256);
+
+                entity.Property(e => e.FavoriteGenreId).HasColumnName("FavoriteGenreID");
+
+                entity.Property(e => e.FavoritePlatformId).HasColumnName("FavoritePlatformID");
+
+                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+
+                entity.Property(e => e.PicFileName).HasColumnName("picFileName");
+
+                entity.Property(e => e.UserName).HasMaxLength(256);
+
+                entity.HasOne(d => d.FavoriteGenre)
+                    .WithMany(p => p.AspNetUsers)
+                    .HasForeignKey(d => d.FavoriteGenreId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AspNetUsers_Genre");
+
+                entity.HasOne(d => d.FavoritePlatform)
+                    .WithMany(p => p.AspNetUsers)
+                    .HasForeignKey(d => d.FavoritePlatformId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AspNetUsers_Platform");
+            });
+
             modelBuilder.Entity<CartItem>(entity =>
             {
                 entity.HasKey(e => e.ItemId)
@@ -127,7 +173,19 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasColumnName("userID")
-                    .HasMaxLength(256);
+                    .HasMaxLength(450);
+
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.CartItem)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CartItem_Game");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.CartItem)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CartItem_AspNetUsers");
             });
 
             modelBuilder.Entity<Event>(entity =>
@@ -163,6 +221,18 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.Property(e => e.EventId).HasColumnName("eventID");
 
                 entity.Property(e => e.GameId).HasColumnName("gameID");
+
+                entity.HasOne(d => d.Event)
+                    .WithMany(p => p.EventGameItem)
+                    .HasForeignKey(d => d.EventId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EventGameItem_Event");
+
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.EventGameItem)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EventGameItem_Game");
             });
 
             modelBuilder.Entity<FriendItem>(entity =>
@@ -182,7 +252,25 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.Property(e => e.HostUserId)
                     .IsRequired()
                     .HasColumnName("hostUserID")
-                    .HasMaxLength(256);
+                    .HasMaxLength(450);
+
+                entity.HasOne(d => d.FriendTypeNavigation)
+                    .WithMany(p => p.FriendItem)
+                    .HasForeignKey(d => d.FriendType)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FriendItem_FriendType");
+
+                entity.HasOne(d => d.FriendUser)
+                    .WithMany(p => p.FriendItemFriendUser)
+                    .HasForeignKey(d => d.FriendUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FriendItem_FriendUserID");
+
+                entity.HasOne(d => d.HostUser)
+                    .WithMany(p => p.FriendItemHostUser)
+                    .HasForeignKey(d => d.HostUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FriendItem_HostUserID");
             });
 
             modelBuilder.Entity<FriendType>(entity =>
@@ -278,6 +366,12 @@ namespace Team5_ConestogaVirtualGameStore.Models
                     .HasForeignKey(d => d.EventId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__JoinedEve__event__44FF419A");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.JoinedEvent)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_JoinedEvent_AspNetUsers");
             });
 
             modelBuilder.Entity<OrderItem>(entity =>
@@ -295,7 +389,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
                     .WithMany(p => p.OrderItem)
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderItem__gameI__5070F446");
+                    .HasConstraintName("FK_OrderItem_Game");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderItem)
@@ -332,6 +426,12 @@ namespace Team5_ConestogaVirtualGameStore.Models
                     .IsRequired()
                     .HasColumnName("userID")
                     .HasMaxLength(450);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.PurchaseOrder)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PurchaseOrder_AspNetUsers");
             });
 
             modelBuilder.Entity<Review>(entity =>
@@ -359,6 +459,12 @@ namespace Team5_ConestogaVirtualGameStore.Models
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Review__reviewLi__2A4B4B5E");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Review)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Review_AspNetUsers");
             });
 
             modelBuilder.Entity<WishlistItem>(entity =>
@@ -370,13 +476,19 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasColumnName("userID")
-                    .HasMaxLength(256);
+                    .HasMaxLength(450);
 
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.WishlistItem)
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__WishlistI__gameI__4AB81AF0");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.WishlistItem)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WishlistItem_AspNetUsers");
             });
 
             OnModelCreatingPartial(modelBuilder);

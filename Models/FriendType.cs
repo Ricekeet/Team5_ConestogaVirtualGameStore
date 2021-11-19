@@ -9,7 +9,14 @@ namespace Team5_ConestogaVirtualGameStore.Models
 {
     public partial class FriendType
     {
+        public FriendType()
+        {
+            FriendItem = new HashSet<FriendItem>();
+        }
+
         public int TypeId { get; set; }
         public string Name { get; set; }
+
+        public virtual ICollection<FriendItem> FriendItem { get; set; }
     }
 }
