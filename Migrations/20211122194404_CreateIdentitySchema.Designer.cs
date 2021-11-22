@@ -10,7 +10,7 @@ using Team5_ConestogaVirtualGameStore.Data;
 namespace Team5_ConestogaVirtualGameStore.Migrations
 {
     [DbContext(typeof(CVGS_IdentityContext))]
-    [Migration("20211116231933_CreateIdentitySchema")]
+    [Migration("20211122194404_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

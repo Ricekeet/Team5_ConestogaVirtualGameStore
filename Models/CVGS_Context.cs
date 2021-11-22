@@ -149,13 +149,11 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.HasOne(d => d.FavoriteGenre)
                     .WithMany(p => p.AspNetUsers)
                     .HasForeignKey(d => d.FavoriteGenreId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AspNetUsers_Genre");
 
                 entity.HasOne(d => d.FavoritePlatform)
                     .WithMany(p => p.AspNetUsers)
                     .HasForeignKey(d => d.FavoritePlatformId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AspNetUsers_Platform");
             });
 
@@ -264,13 +262,13 @@ namespace Team5_ConestogaVirtualGameStore.Models
                     .WithMany(p => p.FriendItemFriendUser)
                     .HasForeignKey(d => d.FriendUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_FriendItem_FriendUserID");
+                    .HasConstraintName("FK_FriendItem_AspNetUsers1");
 
                 entity.HasOne(d => d.HostUser)
                     .WithMany(p => p.FriendItemHostUser)
                     .HasForeignKey(d => d.HostUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_FriendItem_HostUserID");
+                    .HasConstraintName("FK_FriendItem_AspNetUsers");
             });
 
             modelBuilder.Entity<FriendType>(entity =>

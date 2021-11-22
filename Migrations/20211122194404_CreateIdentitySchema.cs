@@ -43,10 +43,10 @@ namespace Team5_ConestogaVirtualGameStore.Migrations
                     picFileName = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    AddressListID = table.Column<int>(nullable: false),
-                    FavoriteGenreID = table.Column<int>(nullable: false),
-                    FavoritePlatformID = table.Column<int>(nullable: false),
-                    PromotialEmails = table.Column<bool>(nullable: false)
+                    AddressListID = table.Column<int>(nullable: true),
+                    FavoriteGenreID = table.Column<int>(nullable: true),
+                    FavoritePlatformID = table.Column<int>(nullable: true),
+                    PromotialEmails = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {

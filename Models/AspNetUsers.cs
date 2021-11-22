@@ -39,10 +39,10 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public string PicFileName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int AddressListId { get; set; }
-        public int FavoriteGenreId { get; set; }
-        public int FavoritePlatformId { get; set; }
-        public bool PromotialEmails { get; set; }
+        public int? AddressListId { get; set; }
+        public int? FavoriteGenreId { get; set; }
+        public int? FavoritePlatformId { get; set; }
+        public bool? PromotialEmails { get; set; }
 
         public virtual Genre FavoriteGenre { get; set; }
         public virtual Platform FavoritePlatform { get; set; }
