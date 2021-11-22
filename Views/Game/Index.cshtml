@@ -70,6 +70,8 @@
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                             <div class="text-center">
                                 <a asp-action="Details" class="btn btn-outline-dark mt-auto" asp-route-id="@item.GameId">Details</a>
+                                <a asp-action="AddToCart" class="btn btn-outline-dark mt-auto" asp-route-id="@item.GameId">Add to Cart</a>
+                                <a asp-action="AddToWishlist" class="btn btn-outline-dark mt-auto" asp-route-id="@item.GameId">Add to Wishlist</a>
                             </div>
                         </div>
                         @if (User.IsInRole("Admin"))
