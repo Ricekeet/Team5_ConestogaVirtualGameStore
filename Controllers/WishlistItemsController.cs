@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,7 +22,8 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // GET: WishlistItems
         public async Task<IActionResult> Index()
         {
-            var cVGS_Context = _context.WishlistItem.Include(w => w.Game);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var cVGS_Context = _context.WishlistItem.Include(w => w.Game).Where(w=>w.UserId==userId.ToString());
             return View(await cVGS_Context.ToListAsync());
         }
 
