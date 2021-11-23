@@ -5,44 +5,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h1>  Game Store</h1>
+
 <div class="container">
-    <!-- Search -->
-    <form style="margin: 20px 0;">
-        <div class="search">
-            <input type="text" class="searchTerm" placeholder="Search">
-            <button type="submit" class="searchButton">
-                <i class="fa fa-search"></i>
-            </button>
-        </div>
+    <br />
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Find by name: <input type="text" name="SearchString" />
+                <input type="submit" value="Search" class="btn btn-primary" /> |
+                <a asp-action="Index">Back to full list</a>
+            </p>
+         </div>
     </form>
 
-    <!-- Filter -->
-    <p class="genre">
-        <b>Genre</b> <br />
-        <label>Action<input type="checkbox" /></label>
-        <label>Fighting<input type="checkbox" /></label>
-        <label>Music & Party<input type="checkbox" /></label>
-        <label>Puzzle<input type="checkbox" /></label>
-        <label>RPG<input type="checkbox" /></label>
-        <label>Shooter<input type="checkbox" /></label>
-        <label>Simulation<input type="checkbox" /></label>
-        <label>Sports<input type="checkbox" /></label>
-        <label>Strategy<input type="checkbox" /></label>
-    </p>
-    <p class="ratingSort">
-        <b>Rating Sorting</b> <br />
-        <a class="btn btn-outline-dark text-light bg-primary mt-auto" href="#">high</a>
-        <a class="btn btn-outline-dark text-light bg-primary mt-auto" href="#">low</a>
-    </p>
-    <p class="platform">
-        <b>Platform</b> <br />
-    </p>
-
     @*@if (User.IsInRole("Admin"))
-    {*@
-        <div style="text-align: right;">
-            <a class="btn btn-outline-dark text-light bg-primary mt-auto" asp-action="Create">Add Game</a>
-        </div>
+        {*@
+    <div style="text-align: right;">
+        <a class="btn btn-outline-dark text-light bg-primary mt-auto" asp-action="Create">Add Game</a>
+    </div>
     @*}*@
 </div>
 <!-- Section-->
