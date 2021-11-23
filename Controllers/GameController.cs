@@ -20,16 +20,21 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         }
 
         // GET: Game
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var cVGS_Context = _context.Game.Include(g => g.Genre).Include(g => g.Platform);
-            return View(await cVGS_Context.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            //var cVGS_Context = _context.Game.Include(g => g.Genre).Include(g => g.Platform);
+            var games = from g in _context.Game select g;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                games = games.Where(g => g.Name.Contains(searchString));
+            }
+
+            return View(await games.ToListAsync());
         }
 
-        public void SendReview()
-        {
-
-        }
         // GET: Game/AddToCart/5
         public async Task<IActionResult> AddToCart(int id)
         {
@@ -85,12 +90,13 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             var game = await _context.Game
                 .Include(g => g.Genre)
                 .Include(g => g.Platform)
+                .Include(g => g.Review)
                 .FirstOrDefaultAsync(m => m.GameId == id);
+
             if (game == null)
             {
                 return NotFound();
             }
-
             return View(game);
         }
 

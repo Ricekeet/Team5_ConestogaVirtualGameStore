@@ -1,22 +1,28 @@
-﻿@model Team5_ConestogaVirtualGameStore.Models.Game
+﻿@model Team5_ConestogaVirtualGameStore.Models.Game;
+@using Microsoft.AspNetCore.Identity
+@using Team5_ConestogaVirtualGameStore.Areas.Identity.Data;
 
+@inject SignInManager<CVGS_User> SignInManager
+@inject UserManager<CVGS_User> UserManager
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- Page Content -->
-<div class="container">
+<head>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/reviewstyle.css">
+</head>
 
+<div class="container">
     <h1 class="my-4">
         @Html.DisplayFor(model => model.Name)
     </h1>
 
-    <!-- Portfolio Item Row -->
     <div class="row">
 
-        <div class="col-md-8">
-            <img class="img-fluid" src="https://via.placeholder.com/750x500" alt="">
+        <div class="col-md-7">
+            <img class="img-fluid" src="https://via.placeholder.com/750x400" alt="">
         </div>
 
         <div class="col-md-4">
@@ -36,53 +42,93 @@
                 <span>$</span>@Html.DisplayFor(model => model.Price)
             </p>
 
-            <h3 class="my-3">Project Details</h3>
+            <h3 class="my-3">Game Details</h3>
             <ul>
                 <li>
                     <span>Platform: </span>
                     @Html.DisplayFor(model => model.Platform.Name)
                 </li>
-                <li>Dolor Sit Amet</li>
-                <li>Consectetur</li>
-                <li>Adipiscing Elit</li>
+                <li>
+                    <span>Genre: </span>
+                    @Html.DisplayFor(model => model.Genre.Name)
+                </li>
             </ul>
         </div>
-
-    </div>
-    <!-- Reviews -->
-    <div class="row">
-
-        <h4>Reviews</h4>
-        <label for="message">Message</label>
-        <textarea name="msg"
-                  id="msg"
-                  cols="30"
-                  rows="5"
-                  class="form-control"></textarea>
-        @using (Html.BeginForm())
-        {
-            for(int i=1; i<6; i++)
-                {
-                    <input type="radio" id="Rating" name="Rating" value="@i"/> @i
-
-                }
-            <input type="submit" asp-action="SendReview" asp-controller="Game" value="Send Review" />
-        }
-    </div>
-
-    <div class="row">
-        <div class="comment mt-4 text-justify float-left">
-            <img src="https://i.imgur.com/yTFUilP.jpg" alt="" class="rounded-circle" width="40" height="40">
-            <b>Jhon Doe</b> <span>- 20 October, 2018</span> <br>
-            <span><span>Status: Pending... </span> <a href="#">Accept</a> <a href="#">Decline</a></span>
-            <p>
-                Review
-            </p>
+        <br />
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.GameId">Edit Game</a> |
+            <a asp-action="Index">Back to List</a>
         </div>
     </div>
+    <br />
+    <div class="row">
+
+        @if (User.IsInRole("Member"))
+        {
+            <h3 class="alert alert-info">Ratings and reviews for <strong>@Html.DisplayFor(model => model.Name)</strong></h3>
+            @using (Html.BeginForm("SetReview", "Review"))
+            {
+                @Html.HiddenFor(x => x.GameId)
+                <input id="userName" name="userName" value="@User.Identity.Name" hidden>
+                <div class="stars">
+                    <input class="star star-5" id="star-5" type="radio" name="Rating" value="5" />
+                    <label class="star star-5" for="star-5"></label>
+                    <input class="star star-4" id="star-4" type="radio" name="Rating" value="4" />
+                    <label class="star star-4" for="star-4"></label>
+                    <input class="star star-3" id="star-3" type="radio" name="Rating" value="3" />
+                    <label class="star star-3" for="star-3"></label>
+                    <input class="star star-2" id="star-2" type="radio" name="Rating" value="2" />
+                    <label class="star star-2" for="star-2"></label>
+                    <input class="star star-1" id="star-1" type="radio" name="Rating" value="1" />
+                    <label class="star star-1" for="star-1"></label>
+                </div>
+                <br />
+                <label for="message">Tell us what you think about this game: <em>(NOTE: feedback will be pending for review by admin!)</em></label>
+                <div class="input-group">
+                    <textarea name="description" id="description" class="form-control" aria-label="Review"></textarea>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-primary">Send Review</button>
+            }
+            foreach (var item in Model.Review)
+            {
+                if (item.Pending == false)
+                {
+                    var user = await UserManager.FindByIdAsync(item.UserId);
+                    <div class="comment mt-4 text-justify float-left">
+                        <img src="https://i.imgur.com/yTFUilP.jpg" alt="" class="rounded-circle" width="40" height="40">
+                        <b>@user.Email</b> <span><em>@item.Rating stars</em></span> <br>
+                        <p>
+                            @item.Description
+                        </p>
+                    </div>
+                }
+            }
+        }
+    </div>
+    <div class="row">
+        @if (User.IsInRole("Admin"))
+        {
+            <h3 class="alert alert-info">Pending reviews for <strong>@Html.DisplayFor(model => model.Name)</strong></h3>
+            @foreach (var item in Model.Review)
+            {
+                if (item.Pending == true)
+                {
+                    var user = await UserManager.FindByIdAsync(item.UserId);
+                    <div class="comment mt-4 text-justify float-left">
+                        <img src="https://i.imgur.com/yTFUilP.jpg" alt="" class="rounded-circle" width="40" height="40">
+                        <b>@user.Email</b> <span><em>@item.Rating stars</em></span> <br>
+                        <p>
+                            @item.Description
+                        </p>
+                        <span>
+                            <a asp-action="AcceptReview" asp-controller="Review" asp-route-id="@item.ReviewId" asp-route-gameId="@item.GameId">Accept</a> OR
+                            <a asp-action="DeclineReview" asp-controller="Review" asp-route-id="@item.ReviewId" asp-route-gameId="@item.GameId">Decline</a>
+                        </span>
+                    </div>
+                }
+            }
+        }
+    </div>
 </div>
-<!-- container -->
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.GameId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
