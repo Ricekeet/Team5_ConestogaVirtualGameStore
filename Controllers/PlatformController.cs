@@ -9,28 +9,28 @@ using Team5_ConestogaVirtualGameStore.Models;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
-    public class GenreController : Controller
+    public class PlatformController : Controller
     {
         private readonly CVGS_Context _context;
 
-        public GenreController(CVGS_Context context)
+        public PlatformController(CVGS_Context context)
         {
             _context = context;
         }
 
-        public Genre GetGenreByID(int genreID)
+        public Platform GetPlatformByID(int platID)
         {
-            var result = _context.Genre.Find(genreID);
+            var result = _context.Platform.Find(platID);
             return result;
         }
 
-        // GET: Genre
+        // GET: Platform
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Genre.ToListAsync());
+            return View(await _context.Platform.ToListAsync());
         }
 
-        // GET: Genre/Details/5
+        // GET: Platform/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,39 +38,39 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 return NotFound();
             }
 
-            var genre = await _context.Genre
-                .FirstOrDefaultAsync(m => m.GenreId == id);
-            if (genre == null)
+            var platform = await _context.Platform
+                .FirstOrDefaultAsync(m => m.PlatformId == id);
+            if (platform == null)
             {
                 return NotFound();
             }
 
-            return View(genre);
+            return View(platform);
         }
 
-        // GET: Genre/Create
+        // GET: Platform/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Genre/Create
+        // POST: Platform/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GenreId,Name,Description")] Genre genre)
+        public async Task<IActionResult> Create([Bind("PlatformId,Name")] Platform platform)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(genre);
+                _context.Add(platform);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(genre);
+            return View(platform);
         }
 
-        // GET: Genre/Edit/5
+        // GET: Platform/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +78,22 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 return NotFound();
             }
 
-            var genre = await _context.Genre.FindAsync(id);
-            if (genre == null)
+            var platform = await _context.Platform.FindAsync(id);
+            if (platform == null)
             {
                 return NotFound();
             }
-            return View(genre);
+            return View(platform);
         }
 
-        // POST: Genre/Edit/5
+        // POST: Platform/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GenreId,Name,Description")] Genre genre)
+        public async Task<IActionResult> Edit(int id, [Bind("PlatformId,Name")] Platform platform)
         {
-            if (id != genre.GenreId)
+            if (id != platform.PlatformId)
             {
                 return NotFound();
             }
@@ -102,12 +102,12 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             {
                 try
                 {
-                    _context.Update(genre);
+                    _context.Update(platform);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GenreExists(genre.GenreId))
+                    if (!PlatformExists(platform.PlatformId))
                     {
                         return NotFound();
                     }
@@ -118,10 +118,10 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(genre);
+            return View(platform);
         }
 
-        // GET: Genre/Delete/5
+        // GET: Platform/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,30 +129,30 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 return NotFound();
             }
 
-            var genre = await _context.Genre
-                .FirstOrDefaultAsync(m => m.GenreId == id);
-            if (genre == null)
+            var platform = await _context.Platform
+                .FirstOrDefaultAsync(m => m.PlatformId == id);
+            if (platform == null)
             {
                 return NotFound();
             }
 
-            return View(genre);
+            return View(platform);
         }
 
-        // POST: Genre/Delete/5
+        // POST: Platform/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var genre = await _context.Genre.FindAsync(id);
-            _context.Genre.Remove(genre);
+            var platform = await _context.Platform.FindAsync(id);
+            _context.Platform.Remove(platform);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GenreExists(int id)
+        private bool PlatformExists(int id)
         {
-            return _context.Genre.Any(e => e.GenreId == id);
+            return _context.Platform.Any(e => e.PlatformId == id);
         }
     }
 }
