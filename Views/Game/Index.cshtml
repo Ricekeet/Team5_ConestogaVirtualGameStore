@@ -19,12 +19,12 @@
          </div>
     </form>
 
-    @*@if (User.IsInRole("Admin"))
-        {*@
+    @if (User.IsInRole("Admin"))
+        {
     <div style="text-align: right;">
         <a class="btn btn-outline-dark text-light bg-primary mt-auto" asp-action="Create">Add Game</a>
     </div>
-    @*}*@
+    }
 </div>
 <!-- Section-->
 <section class="py-5">
@@ -44,7 +44,7 @@
                                 <!-- Product name-->
                                 <h5 class="fw-bolder">@Html.DisplayFor(modelItem => item.Name)</h5>
                                 <!-- Product price-->
-                                @Html.DisplayFor(modelItem => item.Price)
+                                $@Html.DisplayFor(modelItem => item.Price)
                             </div>
                         </div>
                         <!-- Product actions-->
@@ -59,8 +59,8 @@
                         {
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center">
-                                    <a class="btn btn-outline-dark bg-info mt-auto" asp-action="Edit" asp-route-id="@item.GameId">Edit</a>
-                                    <a class="btn btn-outline-dark bg-info mt-auto" asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
+                                    <a class="btn btn-outline-dark bg-secondary mt-auto" asp-action="Edit" asp-route-id="@item.GameId">Edit</a>
+                                    <a class="btn btn-outline-dark bg-secondary mt-auto" asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
                                 </div>
                             </div>
                         }

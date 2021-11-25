@@ -23,6 +23,25 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         {
             return View(await _context.Event.ToListAsync());
         }
+        public async Task<IActionResult> MemberIndex(string searchString)
+        {
+            ViewData["CurrentFilter"] = searchString;
+
+            var events = from e in _context.Event select e;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                events = events.Where(e => e.Description.Contains(searchString));
+            }
+            return View(await events.ToListAsync());
+        }
+
+        public IActionResult EnrollEvent()
+        {
+            ViewData["Enrolled"] = "Enrolled";
+
+            return View("MemberIndex");
+        }
 
         // GET: Events/Details/5
         public async Task<IActionResult> Details(int? id)
