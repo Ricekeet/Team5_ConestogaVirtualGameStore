@@ -20,6 +20,8 @@ namespace Team5_ConestogaVirtualGameStore.ViewModels
         }
 
         public int GameId { get; set; }
+
+        [Required]
         public IFormFile GameImg { get; set; }
         public int GenreId { get; set; }
         public int PlatformId { get; set; }
