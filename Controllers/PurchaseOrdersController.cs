@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Team5_ConestogaVirtualGameStore.Models;
+using Team5_ConestogaVirtualGameStore.ViewModels;
 
 namespace Team5_ConestogaVirtualGameStore
 {
@@ -25,130 +27,60 @@ namespace Team5_ConestogaVirtualGameStore
             return View(await cVGS_Context.ToListAsync());
         }
 
-        // GET: PurchaseOrders/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: PurchaseOrders
+        public async Task<IActionResult> CreditCard()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var purchaseOrder = await _context.PurchaseOrder
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.OrderId == id);
-            if (purchaseOrder == null)
-            {
-                return NotFound();
-            }
-
-            return View(purchaseOrder);
-        }
-
-        // GET: PurchaseOrders/Create
-        public IActionResult Create()
-        {
-            ViewData["UserId"] = new SelectList(_context.AspNetUsers, "Id", "Id");
             return View();
         }
 
+        // 1234 5678 1234 5670
         // POST: PurchaseOrders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,UserId,DateOrdered,Total")] PurchaseOrder purchaseOrder)
+        public async Task<IActionResult> Create([Bind("CardHolderName,CardNumber,CardExpiryMonth,CardExpiryYear,CardCvc")] CardModel cardModel)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            PurchaseOrder purchaseOrder = new PurchaseOrder();
+            purchaseOrder.DateOrdered = DateTime.Today;
+            purchaseOrder.UserId = userId.ToString();
+            purchaseOrder.Total = 0;
+
             if (ModelState.IsValid)
             {
+                // create purchase order
                 _context.Add(purchaseOrder);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["UserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", purchaseOrder.UserId);
-            return View(purchaseOrder);
-        }
 
-        // GET: PurchaseOrders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+                // get autoincrement primary key
+                int nextId = purchaseOrder.OrderId;
 
-            var purchaseOrder = await _context.PurchaseOrder.FindAsync(id);
-            if (purchaseOrder == null)
-            {
-                return NotFound();
-            }
-            ViewData["UserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", purchaseOrder.UserId);
-            return View(purchaseOrder);
-        }
-
-        // POST: PurchaseOrders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,UserId,DateOrdered,Total")] PurchaseOrder purchaseOrder)
-        {
-            if (id != purchaseOrder.OrderId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                // create Order Items
+                var cartItem = _context.CartItem.Include(c => c.Game).Where(c => c.UserId == userId.ToString()).ToList();
+                foreach(CartItem cart in cartItem)
                 {
-                    _context.Update(purchaseOrder);
+                    OrderItem orderItem = new OrderItem() { 
+                        GameId = cart.GameId,
+                        OrderId = nextId
+                    };
+                    _context.Add(orderItem);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                
+                // remove everything in cart 
+                foreach(CartItem cart in cartItem)
                 {
-                    if (!PurchaseOrderExists(purchaseOrder.OrderId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    var c = await _context.CartItem.FindAsync(cart.ItemId);
+                    _context.CartItem.Remove(c);
+                    await _context.SaveChangesAsync();
                 }
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "OrderItems");
             }
             ViewData["UserId"] = new SelectList(_context.AspNetUsers, "Id", "Id", purchaseOrder.UserId);
-            return View(purchaseOrder);
-        }
-
-        // GET: PurchaseOrders/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var purchaseOrder = await _context.PurchaseOrder
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.OrderId == id);
-            if (purchaseOrder == null)
-            {
-                return NotFound();
-            }
-
-            return View(purchaseOrder);
-        }
-
-        // POST: PurchaseOrders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var purchaseOrder = await _context.PurchaseOrder.FindAsync(id);
-            _context.PurchaseOrder.Remove(purchaseOrder);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View("CreditCard");
         }
 
         private bool PurchaseOrderExists(int id)

@@ -1,4 +1,4 @@
-﻿@model Team5_ConestogaVirtualGameStore.Models.Game
+﻿@model Team5_ConestogaVirtualGameStore.ViewModels.GameViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -15,16 +15,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group" hidden>
                 <label asp-for="GameId" class="control-label"></label>
-                <input asp-for="GameId" class="form-control" disabled/>
+                <input asp-for="GameId" class="form-control" disabled />
                 <span asp-validation-for="GameId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="GenreId" class="control-label">Genre</label>
-                <select asp-for="GenreId" class ="form-control" asp-items="ViewBag.GenreId"></select>
+                <select asp-for="GenreId" class="form-control" asp-items="ViewBag.GenreId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="PlatformId" class="control-label">Platform</label>
-                <select asp-for="PlatformId" class ="form-control" asp-items="ViewBag.PlatformId"></select>
+                <select asp-for="PlatformId" class="form-control" asp-items="ViewBag.PlatformId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -56,6 +56,19 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+            @*<div class="form-group">
+                <label asp-for="GameImg" class="control-label"></label>
+                <div class="custom-file">
+                    <input asp-for="GameImg" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+                <span asp-validation-for="GameImg" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="GameImg" class="control-label"></label>
+                <input asp-for="GameImg" class="form-control" type="file"/>
+                <span asp-validation-for="GameImg" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -67,6 +80,18 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@section scripts {
+
+    <script type="text/javascript">
+        // Add the following code if you want the name of the file appear on select
+        $(document).ready(function () {
+            $('.custom-file-input').on('change', function (event) {
+                event.preventDefault();
+                alert("Call File");
+                var fileName = $(this).val().split('\\').pop();
+                $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
+            });
+        });
+    </script>
+
 }

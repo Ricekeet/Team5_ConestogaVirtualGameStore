@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Team5_ConestogaVirtualGameStore.Models;
+using Team5_ConestogaVirtualGameStore.ViewModels;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
     public class GameController : Controller
     {
         private readonly CVGS_Context _context;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public GameController(CVGS_Context context)
+        public GameController(CVGS_Context context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            webHostEnvironment = hostEnvironment;
         }
 
         // GET: Game
@@ -52,8 +57,11 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(cartItem);
-                await _context.SaveChangesAsync();
+                if (!CartItemExists(id))
+                {
+                    _context.Add(cartItem);
+                    await _context.SaveChangesAsync();
+                }
             }
             return RedirectToAction("Index", "Game");
         }
@@ -72,8 +80,11 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             wishItem.UserId = userId.ToString();
             wishItem.GameId = id;
 
-            _context.Add(wishItem);
-            await _context.SaveChangesAsync();
+            if (!WishItemExists(id))
+            {
+                _context.Add(wishItem);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction("Index", "Game");
         }
@@ -113,18 +124,34 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GameId,GenreId,PlatformId,ReviewListId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description")] Game game)
+        public async Task<IActionResult> Create([Bind("GameId,GenreId,PlatformId,ReviewListId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description,GameImg")] GameViewModel gameViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(game);
+                string uniqueFileName = UploadedFile(gameViewModel);
+
+                Game newGame = new Game()
+                {
+                    GameId=gameViewModel.GameId,
+                    GenreId = gameViewModel.GenreId,
+                    PlatformId = gameViewModel.PlatformId,
+                    Name = gameViewModel.Name,
+                    ReleaseDate = gameViewModel.ReleaseDate,
+                    Price=gameViewModel.Price,
+                    Inventory = gameViewModel.Inventory,
+                    DiscountPercent = gameViewModel.DiscountPercent,
+                    Description=gameViewModel.Description,
+                    GameImg = uniqueFileName
+                };
+
+                _context.Add(newGame);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", game.GenreId);
-            ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", game.PlatformId);
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", gameViewModel.GenreId);
+            ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", gameViewModel.PlatformId);
           
-            return View(game);
+            return View(gameViewModel);
         }
 
         // GET: Game/Edit/5
@@ -142,8 +169,21 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             }
             ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", game.GenreId);
             ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", game.PlatformId);
-            
-            return View(game);
+
+            GameViewModel gameViewModel = new GameViewModel()
+            {
+                GameId = game.GameId,
+                GenreId = game.GenreId,
+                PlatformId = game.PlatformId,
+                Description = game.Description,
+                Name = game.Name,
+                Inventory = game.Inventory,
+                Price = game.Price,
+                DiscountPercent = game.DiscountPercent,
+                ReleaseDate = game.ReleaseDate
+            };
+
+            return View(gameViewModel);
         }
 
         // POST: Game/Edit/5
@@ -151,23 +191,39 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GameId,GenreId,PlatformId,ReviewListId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description")] Game game)
+        public async Task<IActionResult> Edit(int id, [Bind("GameId,GenreId,PlatformId,ReviewListId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description")] GameViewModel gameViewModel)
         {
-            if (id != game.GameId)
+            if (id != gameViewModel.GameId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                string uniqueFileName = UploadedFile(gameViewModel);
+
+                Game newGame = new Game()
+                {
+                    GameId = gameViewModel.GameId,
+                    GenreId = gameViewModel.GenreId,
+                    PlatformId = gameViewModel.PlatformId,
+                    Name = gameViewModel.Name,
+                    ReleaseDate = gameViewModel.ReleaseDate,
+                    Price = gameViewModel.Price,
+                    Inventory = gameViewModel.Inventory,
+                    DiscountPercent = gameViewModel.DiscountPercent,
+                    Description = gameViewModel.Description,
+                    GameImg = uniqueFileName
+                };
+
                 try
                 {
-                    _context.Update(game);
+                    _context.Update(newGame);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GameExists(game.GameId))
+                    if (!GameExists(gameViewModel.GameId))
                     {
                         return NotFound();
                     }
@@ -178,9 +234,9 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", game.GenreId);
-            ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", game.PlatformId);
-            return View(game);
+            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", gameViewModel.GenreId);
+            ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", gameViewModel.PlatformId);
+            return View(gameViewModel);
         }
 
         // GET: Game/Delete/5
@@ -218,5 +274,30 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         {
             return _context.Game.Any(e => e.GameId == id);
         }
+
+        private bool CartItemExists(int id)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            return _context.CartItem.Any(e => e.GameId == id && e.UserId == userId.ToString());
+        }
+        private bool WishItemExists(int id)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            return _context.WishlistItem.Any(e => e.GameId == id && e.UserId == userId.ToString());
+        }
+
+        private string UploadedFile(GameViewModel game)
+        {
+            string uniqueFileName = null;
+            string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "img");
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + DateTime.Now.ToString();
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                game.GameImg.CopyTo(fileStream);
+            }
+            return uniqueFileName;
+        }
+
     }
 }

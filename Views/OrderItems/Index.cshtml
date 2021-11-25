@@ -4,29 +4,9 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Purchase</h1>
+<h1>Order History</h1>
 
-<div>
-    <form asp-action="Edit">
-        @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="ItemId" />
-        <div class="form-group">
-            <label asp-for="OrderId" class="control-label"></label>
-            <select asp-for="OrderId" class="form-control" asp-items="ViewBag.OrderId"></select>
-            <span asp-validation-for="OrderId" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="GameId" class="control-label"></label>
-            <select asp-for="GameId" class="form-control" asp-items="ViewBag.GameId"></select>
-            <span asp-validation-for="GameId" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Pay" class="btn btn-primary" />
-        </div>*@
-    </form>
-</div>
-
-@*<table class="table">
+<table class="table">
     <thead>
         <tr>
             <th>
@@ -45,14 +25,12 @@
                 @Html.DisplayFor(modelItem => item.Game.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Order.UserId)
+                @Html.DisplayFor(modelItem => item.Order.DateOrdered)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
+                <a asp-action="Download" asp-route-id="@item.ItemId">Download</a> 
             </td>
         </tr>
 }
     </tbody>
-</table>*@
+</table>

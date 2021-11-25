@@ -1,0 +1,47 @@
+﻿
+@model Team5_ConestogaVirtualGameStore.ViewModels.CardModel
+
+<h1>Payment</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="CardHolderName" class="control-label"></label>
+                <input asp-for="CardHolderName" class="form-control" />
+                <span asp-validation-for="CardHolderName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CardNumber" class="control-label"></label>
+                <input asp-for="CardNumber" class="form-control" />
+                <span asp-validation-for="CardNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CardExpiryMonth" class="control-label"></label>
+                <input asp-for="CardExpiryMonth" class="form-control" />
+                <span asp-validation-for="CardExpiryMonth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CardExpiryYear" class="control-label"></label>
+                <input asp-for="CardExpiryYear" class="form-control" />
+                <span asp-validation-for="CardExpiryYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CardCvc" class="control-label"></label>
+                <input asp-for="CardCvc" class="form-control" />
+                <span asp-validation-for="CardCvc" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="CartItems" asp-action="Index">Back to List</a>
+</div>
