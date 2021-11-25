@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Team5_ConestogaVirtualGameStore.Models.Event>
+
+@{
+    ViewData["Title"] = "Events";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Events</h1>
+<div class="container">
+    <br />
+    <form asp-action="MemberIndex" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Find by name: <input type="text" name="SearchString" />
+                <input type="submit" value="Search" class="btn btn-primary" /> |
+                <a asp-action="MemberIndex">Back to full list</a>
+            </p>
+        </div>
+    </form>
+</div>
+<!-- Section-->
+<section class="py-5">
+    <h1>Upcoming events: </h1>
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+            @foreach (var item in Model)
+            {
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Event image-->
+                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                        <!-- Event details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Event name-->
+                                <h5 class="fw-bolder">@item.Description</h5>
+                                <!-- Event Date-->
+                                @item.StartDate.ToShortDateString() ~ @item.EndDate.ToShortDateString()
+                            </div>
+                        </div>
+                        <!-- Event actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <input type="button" value="Enroll Event" class="btn btn-primary mt-auto" id="enroll" name="enroll" onclick="this.value=(this.value=='Enroll Event')?('Enrolled'):('Enroll Event')" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
