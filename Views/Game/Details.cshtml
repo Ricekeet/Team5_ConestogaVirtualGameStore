@@ -32,14 +32,14 @@
     <div class="row">
 
         <div class="col-md-7">
-            <img class="img-fluid" src="https://via.placeholder.com/750x400" alt="">
+            <img class="img-fluid" src="~/img/@Model.GameImg" alt="" style="width: max-content; height: max-content;">
         </div>
 
         <div class="col-md-4">
-
+            
             <h3 class="my-3">Release Date</h3>
             <p>
-                @Html.DisplayFor(model => model.ReleaseDate)
+                @Model.ReleaseDate.ToLongDateString()
             </p>
 
             <h3 class="my-3">Description</h3>
