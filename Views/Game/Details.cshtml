@@ -7,6 +7,16 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var ratingSum = ViewBag.RatingSum;
+    var ratingCount = ViewBag.RatingCount;
+
+    double rating = 0;
+    if(ratingCount > 0)
+    {
+        rating = (double)ratingSum / (double)ratingCount;
+    }
+    var totalRating = String.Format("{0:0.0}", rating);
 }
 
 <head>
@@ -56,7 +66,10 @@
         </div>
         <br />
         <div>
-            <a asp-action="Edit" asp-route-id="@Model.GameId">Edit Game</a> |
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Edit" asp-route-id="@Model.GameId">Edit Game</a>
+            }
             <a asp-action="Index">Back to List</a>
         </div>
     </div>
@@ -65,7 +78,7 @@
 
         @if (User.IsInRole("Member"))
         {
-            <h3 class="alert alert-info">Ratings and reviews for <strong>@Html.DisplayFor(model => model.Name)</strong></h3>
+            <h3 class="alert alert-info">Ratings and reviews for <strong>@Html.DisplayFor(model => model.Name)</strong> - Overall rating: <strong>@totalRating</strong></h3>
             @using (Html.BeginForm("SetReview", "Review"))
             {
                 @Html.HiddenFor(x => x.GameId)
@@ -79,7 +92,7 @@
                     <label class="star star-3" for="star-3"></label>
                     <input class="star star-2" id="star-2" type="radio" name="Rating" value="2" />
                     <label class="star star-2" for="star-2"></label>
-                    <input class="star star-1" id="star-1" type="radio" name="Rating" value="1" />
+                    <input class="star star-1" id="star-1" type="radio" name="Rating" value="1" checked/>
                     <label class="star star-1" for="star-1"></label>
                 </div>
                 <br />

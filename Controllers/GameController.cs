@@ -29,7 +29,6 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         {
             ViewData["CurrentFilter"] = searchString;
 
-            //var cVGS_Context = _context.Game.Include(g => g.Genre).Include(g => g.Platform);
             var games = from g in _context.Game select g;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -103,6 +102,20 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 .Include(g => g.Platform)
                 .Include(g => g.Review)
                 .FirstOrDefaultAsync(m => m.GameId == id);
+
+            var ratings = _context.Review.Where(g => g.GameId.Equals(id.Value)).Where(r=>r.Pending == false).ToList();
+            if(ratings.Count() > 0)
+            {
+                var ratingSum = ratings.Sum(m => m.Rating);
+                ViewBag.RatingSum = ratingSum;
+                var ratingCount = ratings.Count();
+                ViewBag.RatingCount = ratingCount;
+            }
+            else
+            {
+                ViewBag.RatingSum = 0;
+                ViewBag.RatingCount = 0;
+            }
 
             if (game == null)
             {
