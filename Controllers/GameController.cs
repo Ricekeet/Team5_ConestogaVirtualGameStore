@@ -313,6 +313,11 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                     model.GameImg.CopyTo(fileStream);
                 }
             }
+
+            if (uniqueFileName.Length > 49)
+            {
+                uniqueFileName = uniqueFileName.Substring(0, 5) + Guid.NewGuid().ToString();
+            }
             return uniqueFileName;
         }
 
