@@ -191,7 +191,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GameId,GenreId,PlatformId,ReviewListId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description")] GameViewModel gameViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("GameId,GenreId,PlatformId,ReviewListId,Name,ReleaseDate,Price,Inventory,DiscountPercent,Description,GameImg")] GameViewModel gameViewModel)
         {
             if (id != gameViewModel.GameId)
             {
@@ -286,15 +286,19 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return _context.WishlistItem.Any(e => e.GameId == id && e.UserId == userId.ToString());
         }
 
-        private string UploadedFile(GameViewModel game)
+        private string UploadedFile(GameViewModel model)
         {
             string uniqueFileName = null;
-            string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "img");
-            uniqueFileName = Guid.NewGuid().ToString() + "_" + DateTime.Now.ToString();
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
+
+            if (model.GameImg != null)
             {
-                game.GameImg.CopyTo(fileStream);
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "img");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.GameImg.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.GameImg.CopyTo(fileStream);
+                }
             }
             return uniqueFileName;
         }
