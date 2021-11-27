@@ -85,7 +85,11 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 {
                     return NotFound();
                 }
+                ViewData["GenreId"] = new SelectList(_context.Genre.ToList(), "GenreId", "Name", aspNetUsers.FavoriteGenreId);
             }
+            else
+                ViewData["GenreId"] = new SelectList(_context.Genre.ToList(), "GenreId", "Name", 0);
+
             if (aspNetUsers.FavoritePlatformId != 0)
             {
                 var platform = await _context.Platform.FindAsync(aspNetUsers.FavoritePlatformId);
@@ -93,9 +97,12 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 {
                     return NotFound();
                 }
+                ViewData["PlatformId"] = new SelectList(_context.Platform.ToList(), "PlatformId", "Name", aspNetUsers.FavoritePlatformId);
             }
-            ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", aspNetUsers.FavoriteGenreId);
-            ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", aspNetUsers.FavoritePlatformId);
+            else
+                ViewData["PlatformId"] = new SelectList(_context.Platform.ToList(), "PlatformId", "Name", 0);
+
+
 
             return View(aspNetUsers);
         }
@@ -130,7 +137,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                         throw;
                     }
                 }
-                return Redirect("http://localhost/Identity/Account/Manage/");
+                return Redirect("~/Identity/Account/Manage/");
             }
             return View(aspNetUsers);
         }

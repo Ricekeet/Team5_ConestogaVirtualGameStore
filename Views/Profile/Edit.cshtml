@@ -56,7 +56,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+                <input type="number" asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group form-check" hidden>
@@ -106,12 +106,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="FavoriteGenreId" class="control-label"></label>
-                <select asp-for="FavoriteGenreId" class="form-control" asp-items=@ViewBag.GenreId/>
+                <select asp-for="FavoriteGenreId" class="form-control" asp-items="ViewBag.GenreId"></select>
                 <span asp-validation-for="FavoriteGenreId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FavoritePlatformId" class="control-label"></label>
-                <select asp-for="FavoritePlatformId" class="form-control" asp-items=@ViewBag.PlatformId/>
+                <select asp-for="FavoritePlatformId" class="form-control" asp-items="ViewBag.PlatformId"></select>
                 <span asp-validation-for="FavoritePlatformId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -126,7 +126,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="Birthday" class="control-label"></label>
-                <input asp-for="Birthday" class="form-control" />
+                @if (Model.Birthday == null)
+                {
+                    <input asp-for="Birthday" class="form-control" value="@DateTime.Now" />
+                }
+                <input asp-for="Birthday" class="form-control"/>
                 <span asp-validation-for="Birthday" class="text-danger"></span>
             </div>
             <div class="form-group">
