@@ -18,6 +18,12 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             _context = context;
         }
 
+        public List<Genre> GetGenres()
+        {
+            var result = _context.Genre.ToList();
+            return result;
+        }
+
         public Genre GetGenreByID(int genreID)
         {
             var result = _context.Genre.Find(genreID);

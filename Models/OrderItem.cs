@@ -12,6 +12,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public int ItemId { get; set; }
         public int OrderId { get; set; }
         public int GameId { get; set; }
+        public string Status { get; set; }
 
         public virtual Game Game { get; set; }
         public virtual PurchaseOrder Order { get; set; }

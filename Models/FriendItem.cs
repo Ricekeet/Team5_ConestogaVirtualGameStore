@@ -15,7 +15,5 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public string FriendUserId { get; set; }
 
         public virtual FriendType FriendTypeNavigation { get; set; }
-        public virtual AspNetUsers FriendUser { get; set; }
-        public virtual AspNetUsers HostUser { get; set; }
     }
 }

@@ -11,6 +11,7 @@
     Task<CVGS_User> taskUser = UserManager.FindByIdAsync(UserManager.GetUserId(User));
     CVGS_User usr = taskUser.Result;
     AddressController ac = new AddressController(context);
+    AddressTypeController atc = new AddressTypeController(context);
     GenreController gc = new GenreController(context);
     PlatformController pc = new PlatformController(context);
     List<Address> addresses = ac.GetAddresses(usr.Id);
@@ -24,7 +25,6 @@
     }
 
     <h4>@ViewData["Title"]</h4>
-    @*<partial name="_StatusMessage" model="Model.StatusMessage" />*@
 
     <!-- Header-->
     <header class="bg-dark py-5 bg-profile">
@@ -75,53 +75,43 @@
                                 <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>
                                 <b>Addresses</b>
                             </p>
-                            <p>
-                                <label>Billing</label>
-                                @if(addresses != null)
+                            <a href=""></a>
+                            @if (addresses != null && addresses.Count != 0)
+                            {
+                                @foreach (Address a in addresses)
                                 {
-                                    <input asp-for="@addresses[0].Line1" />
-                                    <input asp-for="@addresses[0].Line2" />
+                                    <p>
+                                        <label>@atc.GetAddressType(a.AddressType).Name</label>
+                                        <input asp-for="@a.Line1" />
+                                        <input asp-for="@a.Line2" />
+                                    </p>
+                                    <p></p>
                                 }
-                            </p>
-                            <p></p>
-                            <p>
-                                <label>Mailing</label>
-                                @if(addresses != null)
-                                {
-                                    <input asp-for="@addresses[1].Line1" />
-                                    <input asp-for="@addresses[1].Line2" />
-                                }
-                            </p>
-                            <p></p>
-                            <p>
-                                <label>Home</label>
-                                @if (addresses != null)
-                                {
-                                    <input asp-for="@addresses[2].Line1" />
-                                    <input asp-for="@addresses[2].Line2" />
-                                }
-                            </p>
-                            <p></p>
+                            }
                             <br>
 
                             <p class="w3-large w3-text-theme"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Preference Setting</b></p>
                             <p>
                                 @if (g.Name != null)
                                 {
-                                <label>@g.Name</label>
+                                    <label><b>Favorite Genre: </b></label>
+                                    <label>@g.Name</label>
                                 }
                             </p>
                             <p>
                                 @if (p.Name != null)
                                 {
+                                    <label><b>Favorite Platform: </b></label>
                                     <label>@p.Name</label>
                                 }
                             </p>
                             <p>
-                                <label>Would you like to receive promotional emails?
-                                    <input type="checkbox" checked="@usr.PromotialEmails" readonly />
+                                <label>
+                                    Promotional Emails: 
+                                    <input type="checkbox" checked="@usr.PromotialEmails" disabled />
                                 </label>
                             </p>
+                            <a asp-action="EditView" asp-controller="Profile" asp-route-id="@usr.Id">Edit Profile</a>
 
                             <br>
                             <p class="w3-large w3-text-theme"><b><i class="fa fa-users fa-fw w3-margin-right w3-text-teal"></i>Family / Friends</b></p>

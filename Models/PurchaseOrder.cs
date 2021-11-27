@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Team5_ConestogaVirtualGameStore.Data;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -19,7 +20,6 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public DateTime DateOrdered { get; set; }
         public double Total { get; set; }
 
-        public virtual AspNetUsers User { get; set; }
         public virtual ICollection<OrderItem> OrderItem { get; set; }
     }
 }

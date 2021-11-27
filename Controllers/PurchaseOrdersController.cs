@@ -23,7 +23,8 @@ namespace Team5_ConestogaVirtualGameStore
         // GET: PurchaseOrders
         public async Task<IActionResult> Index()
         {
-            var cVGS_Context = _context.PurchaseOrder.Include(p => p.User);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var cVGS_Context = _context.PurchaseOrder.Where(p => p.UserId == userId.ToString());
             return View(await cVGS_Context.ToListAsync());
         }
 

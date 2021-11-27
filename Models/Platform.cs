@@ -11,14 +11,12 @@ namespace Team5_ConestogaVirtualGameStore.Models
     {
         public Platform()
         {
-            AspNetUsers = new HashSet<AspNetUsers>();
             Game = new HashSet<Game>();
         }
 
         public int PlatformId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
         public virtual ICollection<Game> Game { get; set; }
     }
 }

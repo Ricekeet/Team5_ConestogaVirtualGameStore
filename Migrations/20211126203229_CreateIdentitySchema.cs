@@ -46,7 +46,9 @@ namespace Team5_ConestogaVirtualGameStore.Migrations
                     AddressListID = table.Column<int>(nullable: true),
                     FavoriteGenreID = table.Column<int>(nullable: true),
                     FavoritePlatformID = table.Column<int>(nullable: true),
-                    PromotialEmails = table.Column<bool>(nullable: true)
+                    PromotialEmails = table.Column<bool>(nullable: true),
+                    gender = table.Column<string>(nullable: true),
+                    birthday = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

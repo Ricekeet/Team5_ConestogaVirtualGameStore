@@ -7,12 +7,14 @@ using System.Collections.Generic;
 
 namespace Team5_ConestogaVirtualGameStore.Models
 {
-    public partial class JoinedEvent
+    public partial class CreditCard
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public int EventId { get; set; }
-
-        public virtual Event Event { get; set; }
+        public short Cvc { get; set; }
+        public string CardHolderName { get; set; }
+        public int CardNumber { get; set; }
+        public short ExpMonth { get; set; }
+        public short ExpYear { get; set; }
     }
 }
