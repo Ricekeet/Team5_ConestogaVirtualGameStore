@@ -80,21 +80,35 @@
                             {
                                 <p>
                                     <label><b>@atc.GetAddressType(a.AddressType).Name: </b></label><br />
-                                    <label>@a.Line1</label><br />
+                                    <label>@a.Line1</label>
                                     @if (a.Line2 != "" && a.Line2 != null)
                                     {
-                                        <label>,@a.Line2</label><br />
+                                        <label>, @a.Line2</label>
                                     }
-                                    <label>@a.City</label><br />
-                                    <label>@a.Province</label><br />
-                                    <label>@a.Country</label>
+                                    @if (a.City != "" && a.City != null)
+                                    {
+                                        <label>, @a.City</label>
+                                    }
+                                    @if (a.Province != "" && a.Province != null)
+                                    {
+                                        <label>, @a.Province</label>
+                                    }
+                                    @if (a.Country != "" && a.Country != null)
+                                    {
+                                        <label>, @a.Country</label>
+                                    }
+                                    @if (a.PostalCode!= "" && a.PostalCode != null)
+                                    {
+                                        <label>, @a.PostalCode</label>
+                                    }
                                 </p>
-                                <p></p>
+                                <br />
                             }
                         }
                         <a asp-action="Index" asp-controller="Address">Edit Addresses</a>
-                        <br>
-                        <p class="w3-large w3-text-theme"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Preference Setting</b></p>
+                        <br />
+                        <br />
+                        <p class="w3-large w3-text-theme"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Preferences</b></p>
                         <p>
                             @if (g.Name != null)
                             {
@@ -120,7 +134,6 @@
                         <br />
                         <br />
                         <a asp-action="Edit" asp-controller="Profile" asp-route-id="@usr.Id" class="btn btn-primary">Edit Profile</a>
-
                     </form>
                 </div>
             </div><br>
