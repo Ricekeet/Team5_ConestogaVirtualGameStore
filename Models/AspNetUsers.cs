@@ -10,10 +10,6 @@ namespace Team5_ConestogaVirtualGameStore.Models
 {
     public partial class AspNetUsers
     {
-        public AspNetUsers()
-        {
-
-        }
         public string Id { get; set; }
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
@@ -38,8 +34,5 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public bool? PromotialEmails { get; set; }
         public string Gender { get; set; }
         public DateTime? Birthday { get; set; }
-
-        public Genre Genre { get; set; }
-        public Platform Platform { get; set; }
     }
 }

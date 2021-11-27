@@ -65,7 +65,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         }
 
         // GET: Profile/Edit/5
-        public async Task<IActionResult> EditView(string id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
@@ -78,10 +78,21 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 return NotFound();
             }
 
-            var genre = await _context.Genre.FindAsync(aspNetUsers.FavoriteGenreId);
-            if (genre == null)
+            if (aspNetUsers.FavoriteGenreId != 0)
             {
-                return NotFound();
+                var genre = await _context.Genre.FindAsync(aspNetUsers.FavoriteGenreId);
+                if (genre == null)
+                {
+                    return NotFound();
+                }
+            }
+            if (aspNetUsers.FavoritePlatformId != 0)
+            {
+                var platform = await _context.Platform.FindAsync(aspNetUsers.FavoritePlatformId);
+                if (platform == null)
+                {
+                    return NotFound();
+                }
             }
             ViewData["GenreId"] = new SelectList(_context.Genre, "GenreId", "Name", aspNetUsers.FavoriteGenreId);
             ViewData["PlatformId"] = new SelectList(_context.Platform, "PlatformId", "Name", aspNetUsers.FavoritePlatformId);
@@ -119,7 +130,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Redirect("http://localhost/Identity/Account/Manage/");
             }
             return View(aspNetUsers);
         }

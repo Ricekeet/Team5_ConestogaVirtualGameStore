@@ -1,0 +1,145 @@
+﻿@model Team5_ConestogaVirtualGameStore.Models.AspNetUsers
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Profile</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="NormalizedUserName" class="control-label"></label>
+                <input asp-for="NormalizedUserName" class="form-control" />
+                <span asp-validation-for="NormalizedUserName" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="NormalizedEmail" class="control-label"></label>
+                <input asp-for="NormalizedEmail" class="form-control" />
+                <span asp-validation-for="NormalizedEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check" hidden>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="EmailConfirmed" /> @Html.DisplayNameFor(model => model.EmailConfirmed)
+                </label>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="PasswordHash" class="control-label"></label>
+                <input asp-for="PasswordHash" class="form-control" />
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="SecurityStamp" class="control-label"></label>
+                <input asp-for="SecurityStamp" class="form-control" />
+                <span asp-validation-for="SecurityStamp" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="ConcurrencyStamp" class="control-label"></label>
+                <input asp-for="ConcurrencyStamp" class="form-control" />
+                <span asp-validation-for="ConcurrencyStamp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check" hidden>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="PhoneNumberConfirmed" /> @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
+                </label>
+            </div>
+            <div class="form-group form-check" hidden>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="TwoFactorEnabled" /> @Html.DisplayNameFor(model => model.TwoFactorEnabled)
+                </label>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="LockoutEnd" class="control-label"></label>
+                <input asp-for="LockoutEnd" class="form-control" />
+                <span asp-validation-for="LockoutEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check" hidden>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="LockoutEnabled" /> @Html.DisplayNameFor(model => model.LockoutEnabled)
+                </label>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="AccessFailedCount" class="control-label"></label>
+                <input asp-for="AccessFailedCount" class="form-control" />
+                <span asp-validation-for="AccessFailedCount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PicFileName" class="control-label"></label>
+                <input asp-for="PicFileName" class="form-control" />
+                <span asp-validation-for="PicFileName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="AddressListId" class="control-label"></label>
+                <input asp-for="AddressListId" class="form-control" />
+                <span asp-validation-for="AddressListId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FavoriteGenreId" class="control-label"></label>
+                <select asp-for="FavoriteGenreId" class="form-control" asp-items=@ViewBag.GenreId/>
+                <span asp-validation-for="FavoriteGenreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FavoritePlatformId" class="control-label"></label>
+                <select asp-for="FavoritePlatformId" class="form-control" asp-items=@ViewBag.PlatformId/>
+                <span asp-validation-for="FavoritePlatformId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PromotialEmails" class="control-label"></label>
+                <input asp-for="PromotialEmails" class="form-control" />
+                <span asp-validation-for="PromotialEmails" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthday" class="control-label"></label>
+                <input asp-for="Birthday" class="form-control" />
+                <span asp-validation-for="Birthday" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-area="Identity" asp-page="/Account/Manage/Index">Back to Profile</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
