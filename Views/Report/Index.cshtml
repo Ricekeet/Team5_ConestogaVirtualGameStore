@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Reports</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Report Number
+            </th>
+            <th>
+                Report Name
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                Member Detail Report
+            </td>
+            <td>
+                <a asp-action="DownloadMemberDetailPdf">Download to PDF</a>
+            </td>
+            <td>
+                <a asp-action="DownloadMemberDetailExcel">Download to Excel</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
