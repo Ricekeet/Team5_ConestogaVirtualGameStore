@@ -61,7 +61,7 @@ namespace Team5_ConestogaVirtualGameStore
                     {
                         GameId = cart.GameId,
                         OrderId = nextId,
-                        Status = "Purchased"
+                        Status = "Processed"
                     };
                     _context.Add(orderItem);
                     await _context.SaveChangesAsync();
