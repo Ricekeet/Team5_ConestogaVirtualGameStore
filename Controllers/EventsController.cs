@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -41,9 +42,23 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(await events.ToListAsync());
         }
 
-        public IActionResult EnrollEvent()
+        public async Task<IActionResult> EnrollEvent(int id)
         {
             ViewData["Enrolled"] = "Enrolled";
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            JoinedEvent enroll = new JoinedEvent()
+            {
+                EventId= id,
+                UserId = userId.ToString()
+            };
+
+            if (!EventUserExists(id, userId.ToString()))
+            {
+                _context.Add(enroll);
+                await _context.SaveChangesAsync();
+            }
 
             return View("MemberIndex");
         }
@@ -201,6 +216,11 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         private bool EventExists(int id)
         {
             return _context.Event.Any(e => e.EventId == id);
+        }
+
+        private bool EventUserExists(int id, string userId)
+        {
+            return _context.JoinedEvent.Any(e => e.EventId == id && e.UserId == userId);
         }
 
         private string UploadedFile(EventViewModel model)

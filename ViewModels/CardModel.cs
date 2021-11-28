@@ -15,10 +15,10 @@ namespace Team5_ConestogaVirtualGameStore.ViewModels
         public string CardNumber { get; set; }
 
         [Required, Display(Name = "Expiration Month"), Range(0, 12)]
-        public long? CardExpiryMonth { get; set; }
+        public int CardExpiryMonth { get; set; }
 
         [Required, Display(Name = "Expiration Year"), Range(2020, 2100)]
-        public long? CardExpiryYear { get; set; }
+        public int CardExpiryYear { get; set; }
 
         [Required, Display(Name = "CVC Security Code"),
             RegularExpression("^[0-9]*$", ErrorMessage = "CVC security code can only contain numbers")]

@@ -28,6 +28,20 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         }
 
 
+        public async Task<ActionResult> SendHardCopy(int id)
+        {
+            Game game = _context.Game.Where(g => g.GameId == id).FirstOrDefault();
+            if (game.Inventory > 0) { game.Inventory -= 1; }
+
+
+            OrderItem oi = _context.OrderItem.Where(oi=>oi.ItemId == id).FirstOrDefault();
+            oi.Status = "Shipping";
+            _context.Update(oi);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public async Task<ActionResult> Download(int id)
         {
             Game game = _context.Game.Where(g => g.GameId == id).ToList()[0];

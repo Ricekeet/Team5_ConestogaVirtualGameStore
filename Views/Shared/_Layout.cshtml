@@ -37,6 +37,7 @@
                             <li class="nav-item"><a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Game">Store</a></li>
                             <li class="nav-item"><a class="nav-link active" aria-current="page" asp-action="MemberIndex" asp-controller="Events">Events</a></li>
                             <li class="nav-item"><a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="OrderItems">Orders</a></li>
+                            <li class="nav-item"><a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="FriendItems">Friends</a></li>
 
                             @if (User.IsInRole("Admin"))
                             {
@@ -50,7 +51,7 @@
                             }
                         }
 
-                        </ul>
+                    </ul>
                         <div class="d-flex">
                             @if (SignInManager.IsSignedIn(User))
                             {
