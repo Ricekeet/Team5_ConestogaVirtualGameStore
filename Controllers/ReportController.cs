@@ -1,17 +1,13 @@
 ﻿using ClosedXML.Excel;
 using DinkToPdf;
 using DinkToPdf.Contracts;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Syncfusion.Pdf;
-using Syncfusion.Pdf.Grid;
-using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
@@ -37,10 +33,15 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                     order by SUM(oi.gameID) desc;";
 
         private IConverter _converter;
+        public IConfiguration _configuration;
+        public string conn = "";
 
-        public ReportController(IConverter converter)
+        public ReportController(IConverter converter, IConfiguration configuration)
         {
             _converter = converter;
+            _configuration = configuration;
+            conn = _configuration.GetConnectionString("Team5_ConestogaVirtualGameStoreContextConnection");
+            
         }
         public IActionResult Index()
         {
@@ -49,52 +50,52 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
 
         public IActionResult MemberDetailPdf()
         {
-            var pdf = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number" }).ToPDF("Member Details");
+            var pdf = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number" }, conn).ToPDF("Member Details");
             var file = _converter.Convert(pdf);
             return File(file, "application/pdf", "MemberDetailsReport.pdf");
         }
         public IActionResult MemberDetailExcel()
         {
-            var excel = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number" }).ToExcel("Member Details");
+            var excel = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number" }, conn).ToExcel("Member Details");
             return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MemberDetailsReport.xlsx");
         }
         public IActionResult GameDetailPdf()
         {
-            var pdf = GetReportFromSQL(gameDetailsQuery, new string[] { "Name", "Release Date", "Price", "Inventory", "Platform", "Genre", "Description" }).ToPDF("Game Details");
+            var pdf = GetReportFromSQL(gameDetailsQuery, new string[] { "Name", "Release Date", "Price", "Inventory", "Platform", "Genre", "Description" }, conn).ToPDF("Game Details");
             var file = _converter.Convert(pdf);
             return File(file, "application/pdf", "GameDetailsReport.pdf");
         }
         public IActionResult GameDetailExcel()
         {
-            var excel = GetReportFromSQL(gameDetailsQuery, new string[] { "Name", "Release Date", "Price", "Inventory", "Platform", "Genre", "Description" }).ToExcel("Game Details");
+            var excel = GetReportFromSQL(gameDetailsQuery, new string[] { "Name", "Release Date", "Price", "Inventory", "Platform", "Genre", "Description" }, conn).ToExcel("Game Details");
             return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "GameDetailsReport.xlsx");
         }
         public IActionResult PopularGamesPdf()
         {
-            var pdf = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }).ToPDF("Popular Games");
+            var pdf = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }, conn).ToPDF("Popular Games");
             var file = _converter.Convert(pdf);
             return File(file, "application/pdf", "PopularGamesReport.pdf");
         }
         public IActionResult PopularGamesExcel()
         {
-            var excel = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }).ToExcel("Popular Games");
+            var excel = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }, conn).ToExcel("Popular Games");
             return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PopularGamesReport.xlsx");
         }
         public IActionResult SalesPdf()
         {
-            var pdf = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }).ToPDF("Popular Games");
+            var pdf = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }, conn).ToPDF("Popular Games");
             var file = _converter.Convert(pdf);
             return File(file, "application/pdf", "PopularGamesReport.pdf");
         }
         public IActionResult SalesExcel()
         {
-            var excel = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }).ToExcel("Popular Games");
+            var excel = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }, conn).ToExcel("Popular Games");
             return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PopularGamesReport.xlsx");
         }
 
-        private static ReportsBuilder GetReportFromSQL(string queryString, string[] columns)
-        { 
-            using SqlConnection connection = new SqlConnection("Server=localhost;Database=Team5_ConestogaVirtualGameStore;Trusted_Connection=True;MultipleActiveResultSets=true");
+        private static ReportsBuilder GetReportFromSQL(string queryString, string[] columns, string conn)
+        {
+            using SqlConnection connection = new SqlConnection(conn);
             SqlCommand command = new SqlCommand(queryString, connection);
             connection.Open();
             SqlDataReader reader = command.ExecuteReader();
