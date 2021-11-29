@@ -7,10 +7,8 @@ using System.Collections.Generic;
 
 namespace Team5_ConestogaVirtualGameStore.Models
 {
-
     public partial class CartItem
     {
-
         public int ItemId { get; set; }
         public string UserId { get; set; }
         public int GameId { get; set; }
