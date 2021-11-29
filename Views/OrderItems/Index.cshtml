@@ -41,16 +41,12 @@
                 @Html.DisplayFor(modelItem => item.Game.Inventory)
             </td>
             <td>
-                <a asp-action="Download" asp-route-id="@item.ItemId">Download</a>
+                <a asp-action="Download" asp-route-id="@item.GameId">Download</a>
             </td>
             <td>
-                @if (item.Status == "Purchased")
+                @if (item.Status == "Processed")
                 {
-                    <a asp-action="SendHardCopy" asp-route-id="@item.ItemId">Ship Hard Copy</a>
-                }
-                else
-                {
-                    <a>Cancel Shipping</a>
+                    <a asp-action="SendHardCopy"  asp-route-gameId="@item.GameId" asp-route-id="@item.ItemId">Ship Hard Copy</a>
                 }
             </td>
         </tr>
