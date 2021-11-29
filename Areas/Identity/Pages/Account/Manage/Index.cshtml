@@ -54,10 +54,10 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <br>
                         @*<p>
-                            <i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                            <label>User Type: </label>
-                            [Unimplemented]
-                        </p>*@
+            <i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>
+            <label>User Type: </label>
+            [Unimplemented]
+        </p>*@
                         <p>
                             <i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>
                             <label>Email: </label>
@@ -69,7 +69,14 @@
                             <label>@usr.PhoneNumber</label>
                         </p>
                         <hr>
-
+                        <p>
+                            <label><b>Gender: </b></label>
+                            @usr.gender
+                        </p>
+                        <p>
+                            <label><b>Birthday: </b></label>
+                            @usr.birthday
+                        </p>
                         <p class="w3-large">
                             <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>
                             <b>Addresses</b>
@@ -97,7 +104,7 @@
                                     {
                                         <label>, @a.Country</label>
                                     }
-                                    @if (a.PostalCode!= "" && a.PostalCode != null)
+                                    @if (a.PostalCode != "" && a.PostalCode != null)
                                     {
                                         <label>, @a.PostalCode</label>
                                     }
