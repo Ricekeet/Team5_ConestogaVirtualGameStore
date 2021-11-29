@@ -25,29 +25,29 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                     JOIN Genre ge ON g.genreId = ge.genreID
                     JOIN Platform p on g.platformID= p.platformID;";
         private readonly string popularGamesQuery = @"
-                    SELECT g.Name, ge.name, FORMAT(g.releaseDate, 'MM/dd/yy'), g.Price, p.name,  SUM(oi.gameID), '$' + CAST(g.price * SUM(oi.gameID) AS VARCHAR(15)) 
+                    SELECT g.Name, ge.name, FORMAT(g.releaseDate, 'MM/dd/yy'), g.Price, p.name,  COUNT(oi.gameID), '$' + CAST(g.price * COUNT(oi.gameID) AS VARCHAR(15)) 
 					FROM Game g 
 					JOIN Platform p ON p.platformID = g.platformID
 					JOIN Genre ge ON ge.genreID = g.genreID
                     JOIN OrderItem oi ON g.gameID = oi.gameID
 					group by g.name, g.Price, g.Inventory, p.name, ge.name, g.releaseDate
-                    order by SUM(oi.gameID) desc;";
+                    order by COUNT(oi.gameID) desc;";
         private readonly string wishlistQuery = @"
-                    SELECT g.Name, ge.name, FORMAT(g.releaseDate, 'MM/dd/yy'), '$' + CAST(g.price AS VARCHAR(15)), p.name,  SUM(wi.gameID)
+                    SELECT g.Name, ge.name, FORMAT(g.releaseDate, 'MM/dd/yy'), '$' + CAST(g.price AS VARCHAR(15)), p.name,  COUNT(wi.gameID)
 					FROM Game g 
 					JOIN Platform p ON p.platformID = g.platformID
 					JOIN Genre ge ON ge.genreID = g.genreID
                     JOIN WishlistItem wi ON g.gameID = wi.gameID
 					group by g.name, g.Price, g.Inventory, p.name, ge.name, g.releaseDate
-                    order by SUM(wi.gameID) desc;";
+                    order by COUNT(wi.gameID) desc;";
         private readonly string salesQuery = @"
-                    SELECT g.Name, ge.name, FORMAT(g.releaseDate, 'MM/dd/yy'), p.name, SUM(oi.gameID), '$' + CAST(g.price * SUM(oi.gameID) AS VARCHAR(15))
+                    SELECT g.Name, ge.name, FORMAT(g.releaseDate, 'MM/dd/yy'), p.name, COUNT(oi.gameID), '$' + CAST(g.price * COUNT(oi.gameID) AS VARCHAR(15))
 					FROM Game g 
 					JOIN Platform p ON p.platformID = g.platformID
 					JOIN Genre ge ON ge.genreID = g.genreID
                     JOIN OrderItem oi ON g.gameID = oi.gameID
 					group by g.name, g.Price, g.Inventory, p.name, ge.name, g.releaseDate
-                    order by g.price * SUM(oi.gameID) desc;";
+                    order by g.price * COUNT(oi.gameID) desc;";
 
         private IConverter _converter;
         public IConfiguration _configuration;
