@@ -301,7 +301,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
 
         private string UploadedFile(GameViewModel model)
         {
-            string uniqueFileName = null;
+            string uniqueFileName = "";
 
             if (model.GameImg != null)
             {
