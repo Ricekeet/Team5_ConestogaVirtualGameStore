@@ -24,8 +24,8 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // GET: CartItems
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
-            var cVGS_Context = _context.CartItem.Include(c => c.Game).Where(c=>c.UserId == userId.ToString());
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var cVGS_Context = _context.CartItem.Include(c => c.Game).Where(c=>c.UserId == userId);
             return View(await cVGS_Context.ToListAsync());
         }
 
@@ -36,10 +36,10 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             {
                 return NotFound();
             }
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var cartItem = await _context.CartItem
                 .Include(c => c.Game)
-                .Where(c => c.UserId == userId.ToString())
+                .Where(c => c.UserId == userId)
                 .FirstOrDefaultAsync(m => m.ItemId == id);
             if (cartItem == null)
             {

@@ -97,7 +97,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.HasOne(d => d.AddressTypeNavigation)
                     .WithMany(p => p.Address)
                     .HasForeignKey(d => d.AddressType)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Address__address__38996AB5");
             });
 
@@ -165,7 +165,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.CartItem)
                     .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_CartItem_Game");
             });
 
@@ -232,13 +232,13 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.HasOne(d => d.Event)
                     .WithMany(p => p.EventGameItem)
                     .HasForeignKey(d => d.EventId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_EventGameItem_Event");
 
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.EventGameItem)
                     .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_EventGameItem_Game");
             });
 
@@ -264,7 +264,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.HasOne(d => d.FriendTypeNavigation)
                     .WithMany(p => p.FriendItem)
                     .HasForeignKey(d => d.FriendType)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_FriendItem_FriendType");
             });
 
@@ -359,7 +359,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.HasOne(d => d.Event)
                     .WithMany(p => p.JoinedEvent)
                     .HasForeignKey(d => d.EventId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__JoinedEve__event__44FF419A");
             });
 
@@ -383,13 +383,13 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.OrderItem)
                     .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_OrderItem_Game");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderItem)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__OrderItem__order__4F7CD00D");
             });
 
@@ -446,7 +446,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.Review)
                     .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Review__reviewLi__2A4B4B5E");
             });
 
@@ -464,7 +464,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.WishlistItem)
                     .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__WishlistI__gameI__4AB81AF0");
             });
 

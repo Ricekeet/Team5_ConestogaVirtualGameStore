@@ -24,7 +24,7 @@ namespace Team5_ConestogaVirtualGameStore
         // GET: PurchaseOrders
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var cVGS_Context = _context.PurchaseOrder.Where(p => p.UserId == userId.ToString());
             return View(await cVGS_Context.ToListAsync());
         }
@@ -37,7 +37,7 @@ namespace Team5_ConestogaVirtualGameStore
         
         public async Task<IActionResult> CreateExistingCard()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             PurchaseOrder purchaseOrder = new PurchaseOrder();
             purchaseOrder.DateOrdered = DateTime.Today;
@@ -47,7 +47,7 @@ namespace Team5_ConestogaVirtualGameStore
             if (ModelState.IsValid)
             {
                 // create purchase order
-                _context.Add(purchaseOrder);
+                _context.PurchaseOrder.Add(purchaseOrder);
                 await _context.SaveChangesAsync();
 
                 // get autoincrement primary key
@@ -63,7 +63,7 @@ namespace Team5_ConestogaVirtualGameStore
                         OrderId = nextId,
                         Status = "Processed"
                     };
-                    _context.Add(orderItem);
+                    _context.OrderItem.Add(orderItem);
                     await _context.SaveChangesAsync();
                 }
 
@@ -89,11 +89,11 @@ namespace Team5_ConestogaVirtualGameStore
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CardHolderName,CardNumber,CardExpiryMonth,CardExpiryYear,CardCvc")] CardModel cardModel)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             PurchaseOrder purchaseOrder = new PurchaseOrder();
             purchaseOrder.DateOrdered = DateTime.Today;
-            purchaseOrder.UserId = userId.ToString();
+            purchaseOrder.UserId = userId;
             purchaseOrder.Total = 0;
 
             if (ModelState.IsValid)
@@ -110,11 +110,11 @@ namespace Team5_ConestogaVirtualGameStore
                 };
 
                 // Register Card
-                _context.Add(creaditCard);
+                _context.CreditCard.Add(creaditCard);
                 await _context.SaveChangesAsync();
 
                 // create purchase order
-                _context.Add(purchaseOrder);
+                _context.PurchaseOrder.Add(purchaseOrder);
                 await _context.SaveChangesAsync();
 
                 // get autoincrement primary key
@@ -129,7 +129,7 @@ namespace Team5_ConestogaVirtualGameStore
                         OrderId = nextId,
                         Status = "Purchased"
                     };
-                    _context.Add(orderItem);
+                    _context.OrderItem.Add(orderItem);
                     await _context.SaveChangesAsync();
                 }
                 

@@ -39,9 +39,9 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // GET: Address
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var cVGS_Context = _context.Address.Include(a => a.AddressTypeNavigation)
-                .Where(c => c.UserId == userId.Value);
+                .Where(c => c.UserId == userId);
             return View(await cVGS_Context.ToListAsync());
         }
 

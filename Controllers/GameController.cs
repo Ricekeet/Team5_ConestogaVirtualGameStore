@@ -47,10 +47,10 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 return NotFound();
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             CartItem cartItem = new CartItem();
-            cartItem.UserId = userId.ToString();
+            cartItem.UserId = userId;
             cartItem.Quantity = 1;
             cartItem.GameId = id;
 
@@ -73,10 +73,10 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 return NotFound();
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             WishlistItem wishItem = new WishlistItem();
-            wishItem.UserId = userId.ToString();
+            wishItem.UserId = userId;
             wishItem.GameId = id;
 
             if (!WishItemExists(id))
@@ -290,13 +290,13 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
 
         private bool CartItemExists(int id)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
-            return _context.CartItem.Any(e => e.GameId == id && e.UserId == userId.ToString());
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _context.CartItem.Any(e => e.GameId == id && e.UserId == userId);
         }
         private bool WishItemExists(int id)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
-            return _context.WishlistItem.Any(e => e.GameId == id && e.UserId == userId.ToString());
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _context.WishlistItem.Any(e => e.GameId == id && e.UserId == userId);
         }
 
         private string UploadedFile(GameViewModel model)

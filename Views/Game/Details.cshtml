@@ -92,7 +92,7 @@
                     <label class="star star-3" for="star-3"></label>
                     <input class="star star-2" id="star-2" type="radio" name="Rating" value="2" />
                     <label class="star star-2" for="star-2"></label>
-                    <input class="star star-1" id="star-1" type="radio" name="Rating" value="1" checked/>
+                    <input class="star star-1" id="star-1" type="radio" name="Rating" value="1" checked />
                     <label class="star star-1" for="star-1"></label>
                 </div>
                 <br />
@@ -108,13 +108,17 @@
                 if (item.Pending == false)
                 {
                     var user = await UserManager.FindByIdAsync(item.UserId);
-                    <div class="comment mt-4 text-justify float-left">
-                        <img src="https://i.imgur.com/yTFUilP.jpg" alt="" class="rounded-circle" width="40" height="40">
-                        <b>@user.Email</b> <span><em>@item.Rating stars</em></span> <br>
-                        <p>
-                            @item.Description
-                        </p>
-                    </div>
+                    if (user != null)
+                    {
+                        <div class="comment mt-4 text-justify float-left">
+                            <img src="https://i.imgur.com/yTFUilP.jpg" alt="" class="rounded-circle" width="40" height="40">
+                            <b>@user.Email</b> <span><em>@item.Rating stars</em></span> <br>
+                            <p>
+                                @item.Description
+                            </p>
+                        </div>
+                    }
+
                 }
             }
         }

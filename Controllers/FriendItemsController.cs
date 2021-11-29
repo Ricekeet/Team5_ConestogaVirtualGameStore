@@ -70,8 +70,8 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
 
             if (ModelState.IsValid)
             {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier);
-                friendItem.HostUserId = userId.ToString();
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                friendItem.HostUserId = userId;
                 friendItem.FriendUserId = aspNetUsers.Id;
                 _context.Add(friendItem);
                 await _context.SaveChangesAsync();

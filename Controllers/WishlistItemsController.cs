@@ -23,11 +23,11 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // GET: WishlistItems
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             List<WishListViewModel> wvm = new List<WishListViewModel>();
 
             // find list of friends
-            var fiList = await _context.FriendItem.Where(w => w.HostUserId == userId.ToString()).ToListAsync();
+            var fiList = await _context.FriendItem.Where(w => w.HostUserId == userId).ToListAsync();
 
             foreach (FriendItem fi in fiList)
             {

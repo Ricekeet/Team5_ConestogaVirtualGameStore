@@ -46,17 +46,17 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         {
             ViewData["Enrolled"] = "Enrolled";
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             JoinedEvent enroll = new JoinedEvent()
             {
                 EventId= id,
-                UserId = userId.ToString()
+                UserId = userId
             };
 
-            if (!EventUserExists(id, userId.ToString()))
+            if (!EventUserExists(id, userId))
             {
-                _context.Add(enroll);
+                _context.JoinedEvent.Add(enroll);
                 await _context.SaveChangesAsync();
             }
 
