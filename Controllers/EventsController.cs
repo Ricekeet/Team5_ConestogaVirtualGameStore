@@ -60,7 +60,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return View("MemberIndex");
+            return RedirectToAction(nameof(MemberIndex));
         }
 
         // GET: Events/Details/5
@@ -225,7 +225,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
 
         private string UploadedFile(EventViewModel model)
         {
-            string uniqueFileName = null;
+            string uniqueFileName = "";
 
             if (model.EventPic != null)
             {

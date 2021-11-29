@@ -28,9 +28,9 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         }
 
 
-        public async Task<ActionResult> SendHardCopy(int id)
+        public async Task<ActionResult> SendHardCopy(int id, int gameId)
         {
-            Game game = _context.Game.Where(g => g.GameId == id).FirstOrDefault();
+            Game game = _context.Game.Where(g => g.GameId == gameId).FirstOrDefault();
             if (game.Inventory > 0) { game.Inventory -= 1; }
 
 

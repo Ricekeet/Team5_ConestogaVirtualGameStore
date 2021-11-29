@@ -42,9 +42,11 @@
                         <!-- Event actions-->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                             <div class="text-center">
-                                <a asp-action="EnrollEvent" class="btn btn-outline-dark mt-auto" 
-                                   asp-route-id="@item.EventId" onclick="this.value=(this.value=='Enroll Event')?('Enrolled'):('Enroll Event')" >
-                                Enroll Event</a>
+                                <a asp-action="EnrollEvent" class="btn btn-outline-dark mt-auto"
+                                   asp-route-id="@item.EventId">
+                                    @*onclick="this.value=(this.value=='Enroll Event')?('Enrolled'):('Enroll Event')"*@
+                                    Enroll Event
+                                </a>
                             </div>
                         </div>
 

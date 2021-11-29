@@ -13,7 +13,6 @@ namespace Team5_ConestogaVirtualGameStore.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
-        [Required]
         [DataType(DataType.Upload)]
         public IFormFile EventPic { get; set; }
     }
