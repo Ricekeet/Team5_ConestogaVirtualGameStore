@@ -14,6 +14,5 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public int EventId { get; set; }
 
         public virtual Event Event { get; set; }
-        public virtual AspNetUsers User { get; set; }
     }
 }

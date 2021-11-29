@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Team5_ConestogaVirtualGameStore.Models;
+
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
@@ -34,10 +36,10 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             {
                 return NotFound();
             }
-
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
             var cartItem = await _context.CartItem
                 .Include(c => c.Game)
-                .Include(c => c.User)
+                .Where(c => c.UserId == userId.ToString())
                 .FirstOrDefaultAsync(m => m.ItemId == id);
             if (cartItem == null)
             {

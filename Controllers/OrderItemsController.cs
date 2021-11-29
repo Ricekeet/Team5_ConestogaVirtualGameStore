@@ -27,141 +27,28 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(await cVGS_Context.ToListAsync());
         }
 
-        // GET: OrderItems/Details/5
-        public async Task<IActionResult> Details(int? id)
+
+        public async Task<ActionResult> SendHardCopy(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            Game game = _context.Game.Where(g => g.GameId == id).FirstOrDefault();
+            if (game.Inventory > 0) { game.Inventory -= 1; }
 
-            var orderItem = await _context.OrderItem
-                .Include(o => o.Game)
-                .Include(o => o.Order)
-                .FirstOrDefaultAsync(m => m.ItemId == id);
-            if (orderItem == null)
-            {
-                return NotFound();
-            }
 
-            return View(orderItem);
-        }
-
-        // GET: OrderItems/Create
-        public IActionResult Create()
-        {
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "Name");
-            ViewData["OrderId"] = new SelectList(_context.PurchaseOrder, "OrderId", "UserId");
-            return View();
-        }
-
-        // POST: OrderItems/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemId,OrderId,GameId")] OrderItem orderItem)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(orderItem);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "Name", orderItem.GameId);
-            ViewData["OrderId"] = new SelectList(_context.PurchaseOrder, "OrderId", "UserId", orderItem.OrderId);
-            return View(orderItem);
-        }
-
-        // GET: OrderItems/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var orderItem = await _context.OrderItem.FindAsync(id);
-            if (orderItem == null)
-            {
-                return NotFound();
-            }
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "Name", orderItem.GameId);
-            ViewData["OrderId"] = new SelectList(_context.PurchaseOrder, "OrderId", "UserId", orderItem.OrderId);
-            return View(orderItem);
-        }
-
-        // POST: OrderItems/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemId,OrderId,GameId")] OrderItem orderItem)
-        {
-            if (id != orderItem.ItemId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(orderItem);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderItemExists(orderItem.ItemId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "Name", orderItem.GameId);
-            ViewData["OrderId"] = new SelectList(_context.PurchaseOrder, "OrderId", "UserId", orderItem.OrderId);
-            return View(orderItem);
-        }
-
-        // GET: OrderItems/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var orderItem = await _context.OrderItem
-                .Include(o => o.Game)
-                .Include(o => o.Order)
-                .FirstOrDefaultAsync(m => m.ItemId == id);
-            if (orderItem == null)
-            {
-                return NotFound();
-            }
-
-            return View(orderItem);
-        }
-
-        // POST: OrderItems/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var orderItem = await _context.OrderItem.FindAsync(id);
-            _context.OrderItem.Remove(orderItem);
+            OrderItem oi = _context.OrderItem.Where(oi=>oi.ItemId == id).FirstOrDefault();
+            oi.Status = "Shipping";
+            _context.Update(oi);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderItemExists(int id)
+        public async Task<ActionResult> Download(int id)
         {
-            return _context.OrderItem.Any(e => e.ItemId == id);
+            Game game = _context.Game.Where(g => g.GameId == id).ToList()[0];
+            string content = game.GameId + game.Description + game.Genre?.Name + game.Platform?.Name;
+            string title = game.Name + ".txt";
+
+            return File(Encoding.UTF8.GetBytes(content), "text/plain", title);
         }
     }
 }

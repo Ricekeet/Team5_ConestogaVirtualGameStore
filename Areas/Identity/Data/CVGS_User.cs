@@ -20,5 +20,7 @@ namespace Team5_ConestogaVirtualGameStore.Areas.Identity.Data
         [ForeignKey("Platform")]
         public int FavoritePlatformID { get; set; }
         public bool PromotialEmails { get; set; }
+        public string gender { get; set; }
+        public DateTime birthday { get; set; }
     }
 }

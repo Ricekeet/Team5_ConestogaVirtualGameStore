@@ -17,6 +17,5 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public bool Pending { get; set; }
 
         public virtual Game Game { get; set; }
-        public virtual AspNetUsers User { get; set; }
     }
 }

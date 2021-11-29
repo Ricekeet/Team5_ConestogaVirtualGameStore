@@ -1,6 +1,5 @@
 ﻿@page
 @model IndexModel
-@inject SignInManager<CVGS_User> SignInManager
 @inject UserManager<CVGS_User> UserManager
 @inject CVGS_Context context
 @using Team5_ConestogaVirtualGameStore.Models
@@ -11,6 +10,7 @@
     Task<CVGS_User> taskUser = UserManager.FindByIdAsync(UserManager.GetUserId(User));
     CVGS_User usr = taskUser.Result;
     AddressController ac = new AddressController(context);
+    AddressTypeController atc = new AddressTypeController(context);
     GenreController gc = new GenreController(context);
     PlatformController pc = new PlatformController(context);
     List<Address> addresses = ac.GetAddresses(usr.Id);
@@ -21,121 +21,129 @@
         g = gc.GetGenreByID(1);
     if (usr.FavoritePlatformID != 0)
         p = pc.GetPlatformByID(usr.FavoritePlatformID);
-    }
+}
 
-    <h4>@ViewData["Title"]</h4>
-    @*<partial name="_StatusMessage" model="Model.StatusMessage" />*@
+<h4>@ViewData["Title"]</h4>
 
-    <!-- Header-->
-    <header class="bg-dark py-5 bg-profile">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
-                <div class="w3-display-container" style="width: 220px; margin: 20px auto; ">
-                    <div style="width: 200px; height: 200px; border-radius: 100px; border: 10px solid; background-image: @usr.picFileName; background-size: cover; background-position:center;">
-                    </div>
-                    <div class="w3-display-bottomleft w3-container w3-text-black text-center" style="margin-top: 20px;">
-                    </div>
-                    <h2 style="color: black; background-color: beige; border: 1px solid black">Jane Doe</h2>
+<!-- Header-->
+<header class="bg-dark py-5 bg-profile">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <div class="w3-display-container" style="width: 220px; margin: 20px auto; ">
+                <div style="width: 200px; height: 200px; border-radius: 100px; border: 10px solid; background-image: @usr.picFileName; background-size: cover; background-position:center;">
                 </div>
+                <div class="w3-display-bottomleft w3-container w3-text-black text-center" style="margin-top: 20px;">
+                </div>
+                <h2 style="color: black; background-color: beige; border: 1px solid black">@usr.LastName, @usr.FirstName</h2>
             </div>
         </div>
-    </header>
-    <!-- Section-->
-    <section>
-        <!-- Page Container -->
-        <div class="w3-content w3-margin-top" style="max-width:1400px;">
+    </div>
+</header>
+<!-- Section-->
+<section>
+    <!-- Page Container -->
+    <div class="w3-content w3-margin-top" style="max-width:1400px;">
 
-            <!-- The Grid -->
-            <div class="w3-row-padding">
+        <!-- The Grid -->
+        <div class="w3-row-padding">
 
-                <div class="w3-white w3-text-grey w3-card-4">
-                    <div class="w3-container">
-                        <!-- Real Profile Information -->
-                        <form id="profile-form" method="post" asp-controller="Profile" asp-action="EditProfile">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <br>
-                            <p>
-                                <i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                                <label>User Type: </label>
-                                [Unimplemented]
-                            </p>
-                            <p>
-                                <i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                                <label>Email: </label>
-                                @usr.Email
-                            </p>
-                            <p>
-                                <i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                                <label>Phone Number: </label>
-                                <label>@usr.PhoneNumber</label>
-                            </p>
-                            <hr>
+            <div class="w3-white w3-text-grey w3-card-4">
+                <div class="w3-container">
+                    <!-- Real Profile Information -->
+                    <form id="profile-form" method="post" asp-controller="Profile" asp-action="EditProfile">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <br>
+                        <p>
+                            <i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                            <label>User Type: </label>
+                            [Unimplemented]
+                        </p>
+                        <p>
+                            <i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                            <label>Email: </label>
+                            @usr.Email
+                        </p>
+                        <p>
+                            <i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                            <label>Phone Number: </label>
+                            <label>@usr.PhoneNumber</label>
+                        </p>
+                        <hr>
 
-                            <p class="w3-large">
-                                <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>
-                                <b>Addresses</b>
-                            </p>
-                            <p>
-                                <label>Billing</label>
-                                @if(addresses != null)
-                                {
-                                    <input asp-for="@addresses[0].Line1" />
-                                    <input asp-for="@addresses[0].Line2" />
-                                }
-                            </p>
-                            <p></p>
-                            <p>
-                                <label>Mailing</label>
-                                @if(addresses != null)
-                                {
-                                    <input asp-for="@addresses[1].Line1" />
-                                    <input asp-for="@addresses[1].Line2" />
-                                }
-                            </p>
-                            <p></p>
-                            <p>
-                                <label>Home</label>
-                                @if (addresses != null)
-                                {
-                                    <input asp-for="@addresses[2].Line1" />
-                                    <input asp-for="@addresses[2].Line2" />
-                                }
-                            </p>
-                            <p></p>
-                            <br>
-
-                            <p class="w3-large w3-text-theme"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Preference Setting</b></p>
-                            <p>
-                                @if (g.Name != null)
-                                {
+                        <p class="w3-large">
+                            <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>
+                            <b>Addresses</b>
+                        </p>
+                        @if (addresses != null && addresses.Count != 0)
+                        {
+                            @foreach (Address a in addresses)
+                            {
+                                <p>
+                                    <label><b>@atc.GetAddressType(a.AddressType).Name: </b></label><br />
+                                    <label>@a.Line1</label>
+                                    @if (a.Line2 != "" && a.Line2 != null)
+                                    {
+                                        <label>, @a.Line2</label>
+                                    }
+                                    @if (a.City != "" && a.City != null)
+                                    {
+                                        <label>, @a.City</label>
+                                    }
+                                    @if (a.Province != "" && a.Province != null)
+                                    {
+                                        <label>, @a.Province</label>
+                                    }
+                                    @if (a.Country != "" && a.Country != null)
+                                    {
+                                        <label>, @a.Country</label>
+                                    }
+                                    @if (a.PostalCode!= "" && a.PostalCode != null)
+                                    {
+                                        <label>, @a.PostalCode</label>
+                                    }
+                                </p>
+                                <br />
+                            }
+                        }
+                        <a asp-action="Index" asp-controller="Address">Edit Addresses</a>
+                        <br />
+                        <br />
+                        <p class="w3-large w3-text-theme"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Preferences</b></p>
+                        <p>
+                            @if (g.Name != null)
+                            {
+                                <label><b>Favorite Genre: </b></label>
                                 <label>@g.Name</label>
-                                }
-                            </p>
-                            <p>
-                                @if (p.Name != null)
-                                {
-                                    <label>@p.Name</label>
-                                }
-                            </p>
-                            <p>
-                                <label>Would you like to receive promotional emails?
-                                    <input type="checkbox" checked="@usr.PromotialEmails" readonly />
-                                </label>
-                            </p>
-
-                            <br>
-                            <p class="w3-large w3-text-theme"><b><i class="fa fa-users fa-fw w3-margin-right w3-text-teal"></i>Family / Friends</b></p>
-                            <br>
-                        </form>
-                    </div>
-                </div><br>
-            </div>
-
-            <!-- End Grid -->
+                            }
+                        </p>
+                        <p>
+                            @if (p.Name != null)
+                            {
+                                <label><b>Favorite Platform: </b></label>
+                                <label>@p.Name</label>
+                            }
+                        </p>
+                        <p>
+                            <label>
+                                Promotional Emails:
+                                <input type="checkbox" checked="@usr.PromotialEmails" disabled />
+                            </label>
+                        </p>
+                        <br />
+                        <p class="w3-large w3-text-theme"><b><i class="fa fa-users fa-fw w3-margin-right w3-text-teal"></i>Family / Friends</b></p>
+                        <br />
+                        <br />
+                        <a asp-action="Edit" asp-controller="Profile" asp-route-id="@usr.Id" class="btn btn-primary">Edit Profile</a>
+                    </form>
+                </div>
+            </div><br>
         </div>
 
-        <!-- End Page Container -->
-        @section Scripts {
-            <partial name="_ValidationScriptsPartial" />
-        }
-    </section>
+        <!-- End Grid -->
+    </div>
+
+    <!-- End Page Container -->
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</section>

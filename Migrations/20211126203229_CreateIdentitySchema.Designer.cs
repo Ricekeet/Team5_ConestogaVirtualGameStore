@@ -10,7 +10,7 @@ using Team5_ConestogaVirtualGameStore.Data;
 namespace Team5_ConestogaVirtualGameStore.Migrations
 {
     [DbContext(typeof(CVGS_IdentityContext))]
-    [Migration("20211122194404_CreateIdentitySchema")]
+    [Migration("20211126203229_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -221,6 +221,12 @@ namespace Team5_ConestogaVirtualGameStore.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<DateTime>("birthday")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("gender")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("picFileName")
                         .HasColumnType("nvarchar(max)");

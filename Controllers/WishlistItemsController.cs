@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Team5_ConestogaVirtualGameStore.Models;
+using Team5_ConestogaVirtualGameStore.ViewModels;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
@@ -23,8 +24,50 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+            List<WishListViewModel> wvm = new List<WishListViewModel>();
+
+            // find list of friends
+            var fiList = await _context.FriendItem.Where(w => w.HostUserId == userId.ToString()).ToListAsync();
+
+            foreach (FriendItem fi in fiList)
+            {
+                // find their userID and userName
+                var aspNetUser = await _context.AspNetUsers
+                    .FirstOrDefaultAsync(m => m.Id == fi.FriendUserId);
+
+                var friendWI = _context.WishlistItem.Include(w => w.Game).Where(w => w.UserId.Contains(aspNetUser.Id));
+
+                foreach (WishlistItem wi in friendWI)
+                {
+                    WishListViewModel vm = new WishListViewModel()
+                    {
+                        Game = wi.Game,
+                        GameId = wi.GameId,
+                        Id = wi.Id,
+                        UserId = wi.UserId,
+                        UserName = aspNetUser.UserName
+                    };
+                    wvm.Add(vm);
+                }
+            }
+
+            // add to existing wishlistItem
             var cVGS_Context = _context.WishlistItem.Include(w => w.Game).Where(w=>w.UserId==userId.ToString());
-            return View(await cVGS_Context.ToListAsync());
+
+            foreach(WishlistItem wi in cVGS_Context)
+            {
+                WishListViewModel vm = new WishListViewModel()
+                {
+                    Game = wi.Game,
+                    GameId = wi.GameId,
+                    Id = wi.Id,
+                    UserId = wi.UserId,
+                    UserName = "Mine"
+                };
+                wvm.Add(vm);
+            }
+            
+            return View(wvm);
         }
 
         // GET: WishlistItems/Delete/5

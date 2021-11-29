@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Team5_ConestogaVirtualGameStore.Models;
+using Team5_ConestogaVirtualGameStore.ViewModels;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
     public class EventsController : Controller
     {
         private readonly CVGS_Context _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public EventsController(CVGS_Context context)
+        public EventsController(CVGS_Context context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = hostEnvironment;
         }
 
         // GET: Events
@@ -36,9 +42,23 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             return View(await events.ToListAsync());
         }
 
-        public IActionResult EnrollEvent()
+        public async Task<IActionResult> EnrollEvent(int id)
         {
             ViewData["Enrolled"] = "Enrolled";
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            JoinedEvent enroll = new JoinedEvent()
+            {
+                EventId= id,
+                UserId = userId.ToString()
+            };
+
+            if (!EventUserExists(id, userId.ToString()))
+            {
+                _context.Add(enroll);
+                await _context.SaveChangesAsync();
+            }
 
             return View("MemberIndex");
         }
@@ -72,15 +92,25 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EventId,StartDate,EndDate,Description,EventPic")] Event @event)
+        public async Task<IActionResult> Create([Bind("EventId,StartDate,EndDate,Description,EventPic")] EventViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@event);
+                string uniqueFileName = UploadedFile(model);
+
+                Event newEvent = new Event()
+                {
+                    Description = model.Description,
+                    StartDate = model.StartDate,
+                    EndDate = model.EndDate,
+                    EventPic = uniqueFileName
+                };
+
+                _context.Add(newEvent);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(@event);
+            return View(model);
         }
 
         // GET: Events/Edit/5
@@ -96,7 +126,16 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             {
                 return NotFound();
             }
-            return View(@event);
+
+            EventViewModel eventViewModel = new EventViewModel()
+            {
+                Description = @event.Description,
+                StartDate = @event.StartDate,
+                EndDate = @event.EndDate,
+                EventId = @event.EventId
+            };
+
+            return View(eventViewModel);
         }
 
         // POST: Events/Edit/5
@@ -104,9 +143,9 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EventId,StartDate,EndDate,Description,EventPic")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("EventId,StartDate,EndDate,Description,EventPic")] EventViewModel model)
         {
-            if (id != @event.EventId)
+            if (id != model.EventId)
             {
                 return NotFound();
             }
@@ -115,12 +154,23 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             {
                 try
                 {
-                    _context.Update(@event);
+                    string uniqueFileName = UploadedFile(model);
+
+                    Event newEvent = new Event()
+                    {
+                        EventId=model.EventId,
+                        Description = model.Description,
+                        StartDate = model.StartDate,
+                        EndDate = model.EndDate,
+                        EventPic = uniqueFileName
+                    };
+
+                    _context.Update(newEvent);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventExists(@event.EventId))
+                    if (!EventExists(model.EventId))
                     {
                         return NotFound();
                     }
@@ -131,7 +181,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(@event);
+            return View(model);
         }
 
         // GET: Events/Delete/5
@@ -166,6 +216,33 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         private bool EventExists(int id)
         {
             return _context.Event.Any(e => e.EventId == id);
+        }
+
+        private bool EventUserExists(int id, string userId)
+        {
+            return _context.JoinedEvent.Any(e => e.EventId == id && e.UserId == userId);
+        }
+
+        private string UploadedFile(EventViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.EventPic != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.EventPic.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.EventPic.CopyTo(fileStream);
+                }
+            }
+
+            if (uniqueFileName.Length > 49)
+            {
+                uniqueFileName = uniqueFileName.Substring(0, 5) + Guid.NewGuid().ToString();
+            }
+            return uniqueFileName;
         }
     }
 }

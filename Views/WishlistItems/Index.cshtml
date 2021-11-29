@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Team5_ConestogaVirtualGameStore.Models.WishlistItem>
+﻿@model IEnumerable<Team5_ConestogaVirtualGameStore.ViewModels.WishListViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,6 +12,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Game)
             </th>
+            <th>
+                <span>Mine / Friend's</span>
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -22,9 +25,17 @@
                 <a asp-action="Details" asp-route-id="@item.GameId">@Html.DisplayFor(modelItem => item.Game.Name)</a>
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+<div>
+    <h4>Social Media Share</h4>
+    <a href="#">Facebook</a>
+    <a href="#">Instagram</a>
+</div>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Team5_ConestogaVirtualGameStore.Controllers;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -9,18 +10,6 @@ namespace Team5_ConestogaVirtualGameStore.Models
 {
     public partial class AspNetUsers
     {
-        public AspNetUsers()
-        {
-            Address = new HashSet<Address>();
-            CartItem = new HashSet<CartItem>();
-            FriendItemFriendUser = new HashSet<FriendItem>();
-            FriendItemHostUser = new HashSet<FriendItem>();
-            JoinedEvent = new HashSet<JoinedEvent>();
-            PurchaseOrder = new HashSet<PurchaseOrder>();
-            Review = new HashSet<Review>();
-            WishlistItem = new HashSet<WishlistItem>();
-        }
-
         public string Id { get; set; }
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
@@ -43,16 +32,7 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public int? FavoriteGenreId { get; set; }
         public int? FavoritePlatformId { get; set; }
         public bool? PromotialEmails { get; set; }
-
-        public virtual Genre FavoriteGenre { get; set; }
-        public virtual Platform FavoritePlatform { get; set; }
-        public virtual ICollection<Address> Address { get; set; }
-        public virtual ICollection<CartItem> CartItem { get; set; }
-        public virtual ICollection<FriendItem> FriendItemFriendUser { get; set; }
-        public virtual ICollection<FriendItem> FriendItemHostUser { get; set; }
-        public virtual ICollection<JoinedEvent> JoinedEvent { get; set; }
-        public virtual ICollection<PurchaseOrder> PurchaseOrder { get; set; }
-        public virtual ICollection<Review> Review { get; set; }
-        public virtual ICollection<WishlistItem> WishlistItem { get; set; }
+        public string Gender { get; set; }
+        public DateTime? Birthday { get; set; }
     }
 }

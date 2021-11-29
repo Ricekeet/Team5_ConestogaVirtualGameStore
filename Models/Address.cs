@@ -20,6 +20,5 @@ namespace Team5_ConestogaVirtualGameStore.Models
         public string Country { get; set; }
 
         public virtual AddressType AddressTypeNavigation { get; set; }
-        public virtual AspNetUsers User { get; set; }
     }
 }

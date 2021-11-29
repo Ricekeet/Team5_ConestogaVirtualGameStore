@@ -220,6 +220,12 @@ namespace Team5_ConestogaVirtualGameStore.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
+                    b.Property<DateTime>("birthday")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("gender")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("picFileName")
                         .HasColumnType("nvarchar(max)");
 
