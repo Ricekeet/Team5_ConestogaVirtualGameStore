@@ -30,8 +30,8 @@
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
             <div class="w3-display-container" style="width: 220px; margin: 20px auto; ">
-                <div style="width: 200px; height: 200px; border-radius: 100px; border: 10px solid; background-image: @usr.picFileName; background-size: cover; background-position:center;">
-                </div>
+                @*<div style="width: 200px; height: 200px; border-radius: 100px; border: 10px solid; background-image: @usr.picFileName; background-size: cover; background-position:center;">
+                </div>*@
                 <div class="w3-display-bottomleft w3-container w3-text-black text-center" style="margin-top: 20px;">
                 </div>
                 <h2 style="color: black; background-color: beige; border: 1px solid black">@usr.LastName, @usr.FirstName</h2>
@@ -53,11 +53,11 @@
                     <form id="profile-form" method="post" asp-controller="Profile" asp-action="EditProfile">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <br>
-                        <p>
+                        @*<p>
                             <i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>
                             <label>User Type: </label>
                             [Unimplemented]
-                        </p>
+                        </p>*@
                         <p>
                             <i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>
                             <label>Email: </label>
@@ -130,7 +130,7 @@
                             </label>
                         </p>
                         <br />
-                        <p class="w3-large w3-text-theme"><b><i class="fa fa-users fa-fw w3-margin-right w3-text-teal"></i>Family / Friends</b></p>
+                        @*<p class="w3-large w3-text-theme"><b><i class="fa fa-users fa-fw w3-margin-right w3-text-teal"></i>Family / Friends</b></p>*@
                         <br />
                         <br />
                         <a asp-action="Edit" asp-controller="Profile" asp-route-id="@usr.Id" class="btn btn-primary">Edit Profile</a>
