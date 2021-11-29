@@ -31,6 +31,22 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                     JOIN OrderItem oi ON g.gameID = oi.gameID
 					group by g.name, g.Price, g.Inventory, p.name, ge.name, g.releaseDate
                     order by SUM(oi.gameID) desc;";
+        private readonly string wishlistQuery = @"
+                    SELECT g.Name, ge.name, FORMAT(g.releaseDate, 'MM/dd/yy'), '$' + CAST(g.price AS VARCHAR(15)), p.name,  SUM(wi.gameID)
+					FROM Game g 
+					JOIN Platform p ON p.platformID = g.platformID
+					JOIN Genre ge ON ge.genreID = g.genreID
+                    JOIN WishlistItem wi ON g.gameID = wi.gameID
+					group by g.name, g.Price, g.Inventory, p.name, ge.name, g.releaseDate
+                    order by SUM(wi.gameID) desc;";
+        private readonly string salesQuery = @"
+                    SELECT g.Name, ge.name, FORMAT(g.releaseDate, 'MM/dd/yy'), p.name, SUM(oi.gameID), '$' + CAST(g.price * SUM(oi.gameID) AS VARCHAR(15))
+					FROM Game g 
+					JOIN Platform p ON p.platformID = g.platformID
+					JOIN Genre ge ON ge.genreID = g.genreID
+                    JOIN OrderItem oi ON g.gameID = oi.gameID
+					group by g.name, g.Price, g.Inventory, p.name, ge.name, g.releaseDate
+                    order by g.price * SUM(oi.gameID) desc;";
 
         private IConverter _converter;
         public IConfiguration _configuration;
@@ -41,7 +57,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             _converter = converter;
             _configuration = configuration;
             conn = _configuration.GetConnectionString("Team5_ConestogaVirtualGameStoreContextConnection");
-            
+
         }
         public IActionResult Index()
         {
@@ -83,14 +99,25 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         }
         public IActionResult SalesPdf()
         {
-            var pdf = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }, conn).ToPDF("Popular Games");
+            var pdf = GetReportFromSQL(salesQuery, new string[] { "Name", "Genre", "Release Date", "Platform", "Orders", "Total Sales" }, conn).ToPDF("Sales From Games");
             var file = _converter.Convert(pdf);
-            return File(file, "application/pdf", "PopularGamesReport.pdf");
+            return File(file, "application/pdf", "SalesReport.pdf");
         }
         public IActionResult SalesExcel()
         {
-            var excel = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }, conn).ToExcel("Popular Games");
-            return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PopularGamesReport.xlsx");
+            var excel = GetReportFromSQL(salesQuery, new string[] { "Name", "Genre", "Release Date", "Platform", "Orders", "Total Sales" }, conn).ToExcel("Sales From Games");
+            return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SalesReport.xlsx");
+        }
+        public IActionResult WishlistPdf()
+        {
+            var pdf = GetReportFromSQL(wishlistQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Wishlist counts" }, conn).ToPDF("Wishlist Top Games");
+            var file = _converter.Convert(pdf);
+            return File(file, "application/pdf", "WishlistReport.pdf");
+        }
+        public IActionResult WishlistExcel()
+        {
+            var excel = GetReportFromSQL(wishlistQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Wishlist counts" }, conn).ToExcel("Wishlist Top Games");
+            return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "WishlistReport.xlsx");
         }
 
         private static ReportsBuilder GetReportFromSQL(string queryString, string[] columns, string conn)
@@ -111,7 +138,8 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                         var list = map[columns[i]];
                         list.Add(reader[i].ToString());
                         map[columns[i]] = list;
-                    } else
+                    }
+                    else
                     {
                         map[columns[i]] = new List<string> { reader[i].ToString() };
                     }
@@ -165,10 +193,11 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                             <head>
                             </head>
                             <body>
+                                <p>{1}</p>
                                 <div class='header'><h1>{0}</h1></div>
                                 <table align='center'>
-                                    <tr>", reportName);
-            foreach(var column in report.Keys)
+                                    <tr>", reportName, System.DateTime.Now.ToLongDateString());
+            foreach (var column in report.Keys)
             {
                 sb.AppendFormat("<th>{0}</th>", column);
             }
@@ -195,7 +224,7 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 Orientation = Orientation.Portrait,
                 PaperSize = PaperKind.A4,
                 Margins = new MarginSettings { Top = 10 },
-                DocumentTitle = "PDF Report"
+                DocumentTitle = reportName
             };
             var objectSettings = new ObjectSettings
             {
