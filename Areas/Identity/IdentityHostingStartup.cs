@@ -24,7 +24,7 @@ namespace Team5_ConestogaVirtualGameStore.Areas.Identity
                     //.AddEntityFrameworkStores<CVGS_IdentityContext>();
 
                 //Add Role Manager Support
-                services.AddIdentity<CVGS_User, IdentityRole>()
+                services.AddIdentity<CVGS_User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddRoleManager<RoleManager<IdentityRole>>()
                     .AddDefaultUI()
                     .AddDefaultTokenProviders()

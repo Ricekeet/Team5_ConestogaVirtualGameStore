@@ -1,3 +1,6 @@
+using BaselineTypeDiscovery;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,7 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Loader;
 using System.Threading.Tasks;
 using Team5_ConestogaVirtualGameStore.Data;
 
@@ -30,6 +37,12 @@ namespace Team5_ConestogaVirtualGameStore
             services.AddControllersWithViews();
             services.AddDbContext<Models.CVGS_Context>(opt =>
                  opt.UseSqlServer(Configuration.GetConnectionString("Team5_ConestogaVirtualGameStoreContextConnection")));
+
+            //var context = new AssemblyLoadContext();
+            //context.LoadFromAssemblyPath(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));
+
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            services.AddMvc().AddControllersAsServices();
 
         }
 

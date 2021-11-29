@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Team5_ConestogaVirtualGameStore.ViewModels.FriendViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>List of Friends / Family</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FriendUserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FriendTypeNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FriendUserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FriendTypeNavigation.Name)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

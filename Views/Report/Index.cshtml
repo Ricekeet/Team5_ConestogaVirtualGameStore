@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Reports</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Report Number
+            </th>
+            <th>
+                Report Name
+            </th>
+            <th>
+                PDF
+            </th>
+            <th>
+                Excel
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                R01
+            </td>
+            <td>
+                Member Details Report
+            </td>
+            <td>
+                <a asp-action="MemberDetailPdf">Download</a>
+            </td>
+            <td>
+                <a asp-action="MemberDetailExcel">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                R02
+            </td>
+            <td>
+                Game Details Report
+            </td>
+            <td>
+                <a asp-action="GameDetailPdf">Download</a>
+            </td>
+            <td>
+                <a asp-action="GameDetailExcel">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                R03
+            </td>
+            <td>
+                Popular Games Report
+            </td>
+            <td>
+                <a asp-action="PopularGamesPdf">Download</a>
+            </td>
+            <td>
+                <a asp-action="PopularGamesExcel">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                R04
+            </td>
+            <td>
+                Sales Report
+            </td>
+            <td>
+                <a asp-action="SalesPdf">Download</a>
+            </td>
+            <td>
+                <a asp-action="SalesExcel">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                R05
+            </td>
+            <td>
+                Wishlist Report
+            </td>
+            <td>
+                <a asp-action="WishlistPdf">Download</a>
+            </td>
+            <td>
+                <a asp-action="WishlistExcel">Download</a>
+            </td>
+        </tr>
+    </tbody>
+</table>

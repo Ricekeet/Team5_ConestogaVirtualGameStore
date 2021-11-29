@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Team5_ConestogaVirtualGameStore.Models.CreditCard>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-controller="PurchaseOrders" asp-action="CreditCard">Register New Card</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CardNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpMonth)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpYear)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CardNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpMonth)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpYear)
+            </td>
+            <td>
+                <a asp-controller="PurchaseOrders" asp-action="CreateExistingCard">Use This</a> ||
+                <a asp-action="Delete">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
