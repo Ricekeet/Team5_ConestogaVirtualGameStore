@@ -14,7 +14,8 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
     public class ReportController : Controller
     {
         private readonly string memberDetailsQuery = @"
-                    SELECT u.UserName, u.Email, u.FirstName, u.LastName, u.PhoneNumber FROM AspNetUsers u 
+                    SELECT u.UserName, u.Email, u.FirstName, u.LastName, u.PhoneNumber, u.gender, FORMAT(u.birthday, 'MM/dd/yy')
+					FROM AspNetUsers u 
                     JOIN AspNetUserRoles ur ON u.Id = ur.UserId 
                     JOIN AspNetRoles r ON ur.RoleId = r.Id 
                     WHERE r.NormalizedName = 'MEMBER'";
@@ -66,13 +67,13 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
 
         public IActionResult MemberDetailPdf()
         {
-            var pdf = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number" }, conn).ToPDF("Member Details");
+            var pdf = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number", "Gender", "Birthday" }, conn).ToPDF("Member Details");
             var file = _converter.Convert(pdf);
             return File(file, "application/pdf", "MemberDetailsReport.pdf");
         }
         public IActionResult MemberDetailExcel()
         {
-            var excel = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number" }, conn).ToExcel("Member Details");
+            var excel = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number", "Gender", "Birthday" }, conn).ToExcel("Member Details");
             return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MemberDetailsReport.xlsx");
         }
         public IActionResult GameDetailPdf()
