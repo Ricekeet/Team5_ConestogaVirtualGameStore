@@ -14,20 +14,69 @@
             <th>
                 Report Name
             </th>
-            <th></th>
-            <th></th>
+            <th>
+                PDF
+            </th>
+            <th>
+                Excel
+            </th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>
+                R01
+            </td>
+            <td>
                 Member Detail Report
             </td>
             <td>
-                <a asp-action="DownloadMemberDetailPdf">Download to PDF</a>
+                <a asp-action="MemberDetailPdf">Download</a>
             </td>
             <td>
-                <a asp-action="DownloadMemberDetailExcel">Download to Excel</a>
+                <a asp-action="MemberDetailExcel">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                R02
+            </td>
+            <td>
+                Game Detail Report
+            </td>
+            <td>
+                <a asp-action="GameDetailPdf">Download</a>
+            </td>
+            <td>
+                <a asp-action="GameDetailExcel">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                R03
+            </td>
+            <td>
+                Popular Games Report
+            </td>
+            <td>
+                <a asp-action="PopularGamesPdf">Download</a>
+            </td>
+            <td>
+                <a asp-action="PopularGamesExcel">Download</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                R04
+            </td>
+            <td>
+                Sales Report
+            </td>
+            <td>
+                <a asp-action="SalesPdf">Download</a>
+            </td>
+            <td>
+                <a asp-action="SalesExcel">Download</a>
             </td>
         </tr>
     </tbody>

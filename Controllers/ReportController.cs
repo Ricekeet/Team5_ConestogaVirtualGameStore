@@ -3,6 +3,7 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Grid;
 using System;
@@ -11,88 +12,181 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Team5_ConestogaVirtualGameStore.Areas.Identity.Data;
-using Team5_ConestogaVirtualGameStore.Data;
-using Team5_ConestogaVirtualGameStore.Models;
 
 namespace Team5_ConestogaVirtualGameStore.Controllers
 {
     public class ReportController : Controller
     {
-        private readonly CVGS_Context _context;
-        private readonly CVGS_IdentityContext identityDb;
-        private readonly RoleManager<IdentityRole> roleManager;
-        private readonly UserManager<CVGS_User> userManager;
+        private readonly string memberDetailsQuery = @"
+                    SELECT u.UserName, u.Email, u.FirstName, u.LastName, u.PhoneNumber FROM AspNetUsers u 
+                    JOIN AspNetUserRoles ur ON u.Id = ur.UserId 
+                    JOIN AspNetRoles r ON ur.RoleId = r.Id 
+                    WHERE r.NormalizedName = 'MEMBER'";
+        private readonly string gameDetailsQuery = @"
+                    SELECT g.Name, FORMAT(g.releaseDate, 'MM/dd/yy'), g.Price, g.Inventory, ge.name, p.name, g.Description
+					FROM Game g 
+                    JOIN Genre ge ON g.genreId = ge.genreID
+                    JOIN Platform p on g.platformID= p.platformID;";
+        private readonly string popularGamesQuery = @"
+                    SELECT g.Name, ge.name, FORMAT(g.releaseDate, 'MM/dd/yy'), g.Price, p.name,  SUM(oi.gameID), '$' + CAST(g.price * SUM(oi.gameID) AS VARCHAR(15)) 
+					FROM Game g 
+					JOIN Platform p ON p.platformID = g.platformID
+					JOIN Genre ge ON ge.genreID = g.genreID
+                    JOIN OrderItem oi ON g.gameID = oi.gameID
+					group by g.name, g.Price, g.Inventory, p.name, ge.name, g.releaseDate
+                    order by SUM(oi.gameID) desc;";
+
         private IConverter _converter;
 
-        public ReportController(CVGS_Context context, UserManager<CVGS_User> userManager, IConverter converter, RoleManager<IdentityRole> roleManager, CVGS_IdentityContext identityDb)
+        public ReportController(IConverter converter)
         {
-            _context = context;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
             _converter = converter;
-            this.identityDb = identityDb;
         }
         public IActionResult Index()
         {
             return View();
         }
 
-        public async Task<IActionResult> DownloadPdf()
+        public IActionResult MemberDetailPdf()
         {
-            var users = new List<CVGS_User>();
-
-
-            foreach (var user in userManager.Users)
-            {
-                if (await userManager.IsInRoleAsync(user, "Member"))
-                {
-                    users.Add(user);
-                }
-            }
-            return View(users);
+            var pdf = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number" }).ToPDF("Member Details");
+            var file = _converter.Convert(pdf);
+            return File(file, "application/pdf", "MemberDetailsReport.pdf");
+        }
+        public IActionResult MemberDetailExcel()
+        {
+            var excel = GetReportFromSQL(memberDetailsQuery, new string[] { "User Name", "Email", "First Name", "Last Name", "Phone Number" }).ToExcel("Member Details");
+            return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MemberDetailsReport.xlsx");
+        }
+        public IActionResult GameDetailPdf()
+        {
+            var pdf = GetReportFromSQL(gameDetailsQuery, new string[] { "Name", "Release Date", "Price", "Inventory", "Platform", "Genre", "Description" }).ToPDF("Game Details");
+            var file = _converter.Convert(pdf);
+            return File(file, "application/pdf", "GameDetailsReport.pdf");
+        }
+        public IActionResult GameDetailExcel()
+        {
+            var excel = GetReportFromSQL(gameDetailsQuery, new string[] { "Name", "Release Date", "Price", "Inventory", "Platform", "Genre", "Description" }).ToExcel("Game Details");
+            return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "GameDetailsReport.xlsx");
+        }
+        public IActionResult PopularGamesPdf()
+        {
+            var pdf = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }).ToPDF("Popular Games");
+            var file = _converter.Convert(pdf);
+            return File(file, "application/pdf", "PopularGamesReport.pdf");
+        }
+        public IActionResult PopularGamesExcel()
+        {
+            var excel = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }).ToExcel("Popular Games");
+            return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PopularGamesReport.xlsx");
+        }
+        public IActionResult SalesPdf()
+        {
+            var pdf = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }).ToPDF("Popular Games");
+            var file = _converter.Convert(pdf);
+            return File(file, "application/pdf", "PopularGamesReport.pdf");
+        }
+        public IActionResult SalesExcel()
+        {
+            var excel = GetReportFromSQL(popularGamesQuery, new string[] { "Name", "Genre", "Release Date", "Price", "Platform", "Order counts", "Total Sales" }).ToExcel("Popular Games");
+            return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PopularGamesReport.xlsx");
         }
 
-        public async Task<IActionResult> DownloadMemberDetailPdf()
-        {
-            var users = new List<CVGS_User>();
-            
+        private static ReportsBuilder GetReportFromSQL(string queryString, string[] columns)
+        { 
+            using SqlConnection connection = new SqlConnection("Server=localhost;Database=Team5_ConestogaVirtualGameStore;Trusted_Connection=True;MultipleActiveResultSets=true");
+            SqlCommand command = new SqlCommand(queryString, connection);
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
 
-            foreach (var user in userManager.Users)
+            var map = new Dictionary<string, List<string>>();
+
+            while (reader.Read())
             {
-                if (await userManager.IsInRoleAsync(user, "Member"))
+                for (int i = 0; i < columns.Length; i++)
                 {
-                    users.Add(user);
+                    if (map.ContainsKey(columns[i]))
+                    {
+                        var list = map[columns[i]];
+                        list.Add(reader[i].ToString());
+                        map[columns[i]] = list;
+                    } else
+                    {
+                        map[columns[i]] = new List<string> { reader[i].ToString() };
+                    }
                 }
             }
+            reader.Close();
+
+            return new ReportsBuilder(map);
+        }
+    }
+
+    class ReportsBuilder
+    {
+        private readonly Dictionary<string, List<string>> report = new Dictionary<string, List<string>>();
+
+        public ReportsBuilder(Dictionary<string, List<string>> report)
+        {
+            this.report = report;
+        }
+
+        public byte[] ToExcel(string reportName)
+        {
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add(reportName);
+            int columnIndex = 1;
+            foreach (var entry in report)
+            {
+                int rowIndex = 1;
+
+                worksheet.Cell(rowIndex++, columnIndex).Value = entry.Key;
+                for (int i = 0; i < entry.Value.Count; i++)
+                {
+                    worksheet.Cell(rowIndex++, columnIndex).Value = entry.Value[i];
+                }
+                columnIndex++;
+            }
+
+            worksheet.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+
+            return stream.ToArray();
+        }
+
+        public HtmlToPdfDocument ToPDF(string reportName)
+        {
             var sb = new StringBuilder();
-            sb.Append(@"
+            sb.AppendFormat(@"
                         <html>
                             <head>
                             </head>
                             <body>
-                                <div class='header'><h1>This is the generated PDF report!!!</h1></div>
+                                <div class='header'><h1>{0}</h1></div>
                                 <table align='center'>
-                                    <tr>
-                                        <th>UserName</th>
-                                        <th>Email</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                    </tr>");
-            foreach (var user in users)
+                                    <tr>", reportName);
+            foreach(var column in report.Keys)
             {
-                sb.AppendFormat(@"<tr>
-                                    <td>{0}</td>
-                                    <td>{1}</td>
-                                    <td>{2}</td>
-                                    <td>{3}</td>
-                                  </tr>", user.UserName, user.Email, user.FirstName, user.LastName);
+                sb.AppendFormat("<th>{0}</th>", column);
             }
-            sb.Append(@"
-                                </table>
-                            </body>
-                        </html>");
+            sb.Append("</tr>");
 
+            var columnLength = report.Values.Count;
+            var rowLength = report.Values.Max(x => x != null ? x.Count : 0);
+
+            for (int i = 0; i < rowLength; i++)
+            {
+                sb.Append("<tr>");
+                for (int j = 0; j < columnLength; j++)
+                {
+                    sb.AppendFormat("<td>{0}</td>", report.Values.ElementAt(j)[i]);
+                }
+                sb.Append("</tr>");
+            }
+
+            sb.Append(@"</table></body></html>");
 
             var globalSettings = new GlobalSettings
             {
@@ -115,71 +209,8 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
                 GlobalSettings = globalSettings,
                 Objects = { objectSettings }
             };
-            var file = _converter.Convert(pdf);
-            return File(file, "application/pdf", "MemberDetailsReport.pdf");
-        }
 
-        public async Task<IActionResult> DownloadMemberDetailExcel()
-        {
-            var users = new List<CVGS_User>();
-            //var members = (from u in identityDb.Users
-            //               join ur in identityDb.UserRoles on u.Id equals ur.UserId
-            //               join r in identityDb.Roles.Where(x => x.NormalizedName == "MEMBERS") on ur.RoleId equals r.Id
-            //               select new { 
-            //               userId = u.Id,
-            //               roleId = r.Id,
-            //               firstName = u.FirstName,
-            //               lastName = u.LastName,
-            //               phone = u.PhoneNumber
-            //               }).ToList();
-
-
-            foreach (var user in userManager.Users)
-            {
-                if (await userManager.IsInRoleAsync(user, "Member"))
-                {
-                    users.Add(user);
-                }
-            }
-
-            using (var workbook = new XLWorkbook())
-            {
-                var worksheet = workbook.Worksheets.Add("MemberDetail");
-                var currentRow = 1;
-                worksheet.Cell(currentRow, 1).Value = "Username";
-                worksheet.Cell(currentRow, 2).Value = "Email";
-                worksheet.Cell(currentRow, 3).Value = "First Name";
-                worksheet.Cell(currentRow, 4).Value = "Last Name";
-                worksheet.Cell(currentRow, 5).Value = "Phone Number";
-                worksheet.Cell(currentRow, 6).Value = "Address";
-                worksheet.Cell(currentRow, 7).Value = "Favorite Genre";
-                worksheet.Cell(currentRow, 8).Value = "Favorite Platform";
-
-                foreach (var user in users)
-                {
-                    currentRow++;
-                    worksheet.Cell(currentRow, 1).Value = user.UserName;
-                    worksheet.Cell(currentRow, 2).Value = user.Email;
-                    worksheet.Cell(currentRow, 3).Value = user.FirstName;
-                    worksheet.Cell(currentRow, 4).Value = user.LastName;
-                    worksheet.Cell(currentRow, 5).Value = user.PhoneNumber;
-                    worksheet.Cell(currentRow, 6).Value = user.AddressListID;
-                    worksheet.Cell(currentRow, 7).Value = user.FavoriteGenreID;
-                    worksheet.Cell(currentRow, 8).Value = user.FavoritePlatformID;
-                }
-                worksheet.Columns().AdjustToContents();
-
-                using (var stream = new MemoryStream())
-                {
-                    workbook.SaveAs(stream);
-                    var content = stream.ToArray();
-
-                    return File(
-                        content,
-                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        "MemberDetail.xlsx");
-                }
-            }
+            return pdf;
         }
     }
 }
