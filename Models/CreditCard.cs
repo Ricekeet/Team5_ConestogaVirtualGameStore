@@ -11,10 +11,10 @@ namespace Team5_ConestogaVirtualGameStore.Models
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public short Cvc { get; set; }
+        public string Cvc { get; set; }
         public string CardHolderName { get; set; }
-        public int CardNumber { get; set; }
-        public short ExpMonth { get; set; }
-        public short ExpYear { get; set; }
+        public string CardNumber { get; set; }
+        public int ExpMonth { get; set; }
+        public int ExpYear { get; set; }
     }
 }
