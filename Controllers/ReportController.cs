@@ -164,7 +164,13 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
         public byte[] ToExcel(string reportName)
         {
             using var workbook = new XLWorkbook();
+            using var stream = new MemoryStream();
             var worksheet = workbook.Worksheets.Add(reportName);
+            if (report.Count == 0)
+            {
+                workbook.SaveAs(stream);
+                return stream.ToArray();
+            }
             int columnIndex = 1;
             foreach (var entry in report)
             {
@@ -179,8 +185,6 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             }
 
             worksheet.Columns().AdjustToContents();
-
-            using var stream = new MemoryStream();
             workbook.SaveAs(stream);
 
             return stream.ToArray();
@@ -204,17 +208,21 @@ namespace Team5_ConestogaVirtualGameStore.Controllers
             }
             sb.Append("</tr>");
 
-            var columnLength = report.Values.Count;
-            var rowLength = report.Values.Max(x => x != null ? x.Count : 0);
-
-            for (int i = 0; i < rowLength; i++)
+            if (report.Count > 0)
             {
-                sb.Append("<tr>");
-                for (int j = 0; j < columnLength; j++)
+                var columnLength = report.Values.Count;
+                var rowLength = report.Values.Max(x => x != null ? x.Count : 0);
+
+                for (int i = 0; i < rowLength; i++)
                 {
-                    sb.AppendFormat("<td>{0}</td>", report.Values.ElementAt(j)[i]);
+                    sb.Append("<tr>");
+                    for (int j = 0; j < columnLength; j++)
+                    {
+                        sb.AppendFormat("<td>{0}</td>", report.Values.ElementAt(j)[i]);
+                    }
+                    sb.Append("</tr>");
                 }
-                sb.Append("</tr>");
+
             }
 
             sb.Append(@"</table></body></html>");
